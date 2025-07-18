@@ -201,7 +201,7 @@ const Projects = () => {
               whileTap={{ scale: 0.95 }}
               className="bg-white text-blue-600 px-8 py-3 rounded-full font-medium hover:shadow-lg transition-shadow duration-200"
             >
-              Let's Talk
+              Let&apos;s Talk
             </motion.button>
           </div>
         </motion.div>
