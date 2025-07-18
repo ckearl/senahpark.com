@@ -255,8 +255,8 @@ const Contact = () => {
                 Let's Work Together
               </h3>
               <p className="text-lg opacity-90 mb-6">
-                I'm currently available for freelance projects and full-time opportunities. 
-                Let's discuss how we can create something amazing together.
+                I&apos;m currently available for freelance projects and full-time opportunities. 
+                Let&apos;s discuss how we can create something amazing together.
               </p>
               <div className="flex items-center gap-2">
                 <div className="w-3 h-3 bg-green-400 rounded-full animate-pulse"></div>

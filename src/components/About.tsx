@@ -48,14 +48,14 @@ const About = () => {
                 Who I Am
               </h3>
               <p className="text-gray-600 leading-relaxed mb-6">
-                I'm a passionate full-stack developer and designer with over 5 years of experience 
+                I&apos;m a passionate full-stack developer and designer with over 5 years of experience 
                 creating innovative digital solutions. I believe in the power of technology to 
-                transform ideas into impactful experiences that make a difference in people's lives.
+                transform ideas into impactful experiences that make a difference in people&apos;s lives.
               </p>
               <p className="text-gray-600 leading-relaxed">
                 My approach combines technical expertise with creative problem-solving, 
                 ensuring that every project I work on is not only functional but also 
-                beautiful and user-friendly. I'm constantly learning and adapting to 
+                beautiful and user-friendly. I&apos;m constantly learning and adapting to 
                 new technologies to stay at the forefront of the industry.
               </p>
             </div>

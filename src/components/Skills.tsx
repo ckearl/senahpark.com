@@ -166,8 +166,8 @@ const Skills = () => {
           </h3>
           <p className="text-lg opacity-90 max-w-2xl mx-auto">
             With a diverse skill set spanning frontend, backend, design, and DevOps, 
-            I'm equipped to handle projects from concept to deployment. 
-            Let's collaborate to create something amazing together.
+            I&apos;m equipped to handle projects from concept to deployment. 
+            Let&apos;s collaborate to create something amazing together.
           </p>
         </motion.div>
       </div>

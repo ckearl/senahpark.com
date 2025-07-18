@@ -193,8 +193,8 @@ const Projects = () => {
               Have a Project in Mind?
             </h3>
             <p className="text-lg opacity-90 mb-6 max-w-2xl mx-auto">
-              I'm always excited to work on new and challenging projects. 
-              Let's discuss how we can bring your ideas to life together.
+              I&apos;m always excited to work on new and challenging projects. 
+              Let&apos;s discuss how we can bring your ideas to life together.
             </p>
             <motion.button
               whileHover={{ scale: 1.05 }}
