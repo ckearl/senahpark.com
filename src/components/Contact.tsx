@@ -250,9 +250,9 @@ const Contact = () => {
 										viewport={{ once: true }}
 										whileHover={{ scale: 1.1 }}
 										whileTap={{ scale: 0.9 }}
-										className={`w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center hover:bg-gradient-to-r hover:from-blue-600 hover:to-purple-600 transition-all duration-200`}
+										className={`w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center hover:bg-gradient-to-r hover:from-blue-600 hover:to-purple-600 transition-colors transition-bg duration-200`}
 									>
-										<social.icon className="text-gray-700" size={24} />
+										<social.icon className="text-gray-700 group-hover:text-white transition-colors duration-200" size={24} />
 									</motion.a>
 								))}
 							</div>
