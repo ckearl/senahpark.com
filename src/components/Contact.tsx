@@ -1,7 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { Mail, Phone, MapPin, Send, Github, Linkedin, Twitter } from 'lucide-react';
+import { Mail, Phone, MapPin, Send, Instagram, Linkedin } from 'lucide-react';
 import { useState } from 'react';
 
 const Contact = () => {
@@ -34,46 +34,38 @@ const Contact = () => {
   };
 
   const contactInfo = [
-    {
-      icon: Mail,
-      title: 'Email',
-      value: 'senah.park@example.com',
-      link: 'mailto:senah.park@example.com'
-    },
-    {
-      icon: Phone,
-      title: 'Phone',
-      value: '+1 (555) 123-4567',
-      link: 'tel:+15551234567'
-    },
-    {
-      icon: MapPin,
-      title: 'Location',
-      value: 'San Francisco, CA',
-      link: '#'
-    }
-  ];
+		{
+			icon: Mail,
+			title: "Email",
+			value: "parksenah@gmail.com",
+			link: "mailto:parksenah@gmail.com",
+		},
+		{
+			icon: Phone,
+			title: "Phone",
+			value: "+1 (801) 915-6099",
+			link: "tel:+18019156099",
+		},
+		{
+			icon: MapPin,
+			title: "Location",
+			value: "Salt Lake City, UT",
+			link: "https://maps.app.goo.gl/6jK2Th9v2BY2CA5W9",
+		},
+	];
 
   const socialLinks = [
-    {
-      icon: Github,
-      name: 'GitHub',
-      url: 'https://github.com/senahpark',
-      color: 'hover:bg-gray-900'
-    },
-    {
-      icon: Linkedin,
-      name: 'LinkedIn',
-      url: 'https://linkedin.com/in/senahpark',
-      color: 'hover:bg-blue-600'
-    },
-    {
-      icon: Twitter,
-      name: 'Twitter',
-      url: 'https://twitter.com/senahpark',
-      color: 'hover:bg-blue-400'
-    }
-  ];
+		{
+			icon: Instagram,
+			name: "Instagram",
+			url: "https://www.instagram.com/senahpomaikai/",
+		},
+		{
+			icon: Linkedin,
+			name: "LinkedIn",
+			url: "https://linkedin.com/in/senahpark",
+		},
+	];
 
   return (
 		<section id="contact" className="py-20 bg-gray-50">
@@ -258,7 +250,7 @@ const Contact = () => {
 										viewport={{ once: true }}
 										whileHover={{ scale: 1.1 }}
 										whileTap={{ scale: 0.9 }}
-										className={`w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center ${social.color} transition-all duration-200`}
+										className={`w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center hover:bg-gradient-to-r hover:from-blue-600 hover:to-purple-600 transition-all duration-200`}
 									>
 										<social.icon className="text-gray-700" size={24} />
 									</motion.a>

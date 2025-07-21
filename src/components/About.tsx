@@ -6,7 +6,7 @@ import { User, MapPin, Calendar, Award } from 'lucide-react';
 const About = () => {
   const personalInfo = [
     { icon: User, label: 'Name', value: 'Senah Park' },
-    { icon: MapPin, label: 'Location', value: 'San Francisco, CA' },
+    { icon: MapPin, label: 'Location', value: 'Salt Lake City, UT' },
     { icon: Calendar, label: 'Experience', value: '5+ Years' },
     { icon: Award, label: 'Specialization', value: 'Full-Stack Development' },
   ];
