@@ -9,49 +9,49 @@ const LinksPage = () => {
   };
 
   const links = [
-    {
-      name: 'Portfolio Website',
-      url: 'https://senahpark.com',
-      description: 'My main portfolio and work showcase',
-      icon: '🌐'
-    },
-    {
-      name: 'GitHub',
-      url: 'https://github.com/senahpark',
-      description: 'Check out my code and projects',
-      icon: '💻'
-    },
-    {
-      name: 'LinkedIn',
-      url: 'https://linkedin.com/in/senahpark',
-      description: 'Professional profile and experience',
-      icon: '💼'
-    },
-    {
-      name: 'Twitter/X',
-      url: 'https://twitter.com/senahpark',
-      description: 'Follow me for updates and thoughts',
-      icon: '🐦'
-    },
-    {
-      name: 'Resume',
-      url: '#',
-      description: 'Download my latest resume',
-      icon: '📄'
-    },
-    {
-      name: 'Blog',
-      url: '#',
-      description: 'Read my latest articles and insights',
-      icon: '✍️'
-    },
-    {
-      name: 'Contact',
-      url: 'mailto:hello@senahpark.com',
-      description: 'Get in touch for collaborations',
-      icon: '📧'
-    }
-  ];
+		{
+			name: "Amazon Storefront",
+			url: "https://www.amazon.com/shop/senahpomaikai?ref_=cm_sw_r_apin_aipsfshop_X1XH4KEYRYRJESQ3HYVQ&language=en-US",
+			description: "Check out my Amazon Storefront",
+			icon: "🛒",
+		},
+		{
+			name: "TikTok",
+			url: "https://www.tiktok.com/@senahpomaikai",
+			description: "Follow me for my latest videos",
+			icon: "🎥",
+		},
+		{
+			name: "Instagram",
+			url: "https://www.instagram.com/senahpomaikai",
+			description: "Follow me for updates and thoughts",
+			icon: "📷",
+		},
+		{
+			name: "Artifact Uprising",
+			url: "http://artifactuprising.sjv.io/K093j9",
+			description: "Use code senah15 for 15% off",
+			icon: "📚",
+		},
+		{
+			name: "Cords Club",
+			url: "http://cordsclub.com/discount/SENAH",
+			description: "Use code SENAH",
+			icon: "💎",
+		},
+		{
+			name: "Contact",
+			url: "mailto:hello@senahpark.com",
+			description: "Get in touch for collaborations",
+			icon: "📧",
+		},
+		{
+			name: "Portfolio Website",
+			url: "https://senahpark.com",
+			description: "My main portfolio and work showcase",
+			icon: "🌐",
+		},
+	];
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white">
