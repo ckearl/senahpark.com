@@ -133,9 +133,10 @@ export default function LectureViewer({
 	// Set audio URL when lecture changes (you'll need to implement audio URL logic)
 	useEffect(() => {
 		if (selectedLecture) {
-			// In a real implementation, you'd get the audio URL from Google Drive or your storage
-			// For now, using a placeholder
-			setAudioUrl(`/api/audio/${selectedLecture.id}.mp3`);
+			const url = `/api/audio/${selectedLecture.id}`;
+			console.log("Setting audio URL:", url);
+			console.log("Lecture details:", selectedLecture);
+			setAudioUrl(url);
 		}
 	}, [selectedLecture]);
 
@@ -245,10 +246,16 @@ export default function LectureViewer({
 					<div className="lg:col-span-3 space-y-6">
 						{/* Audio Player */}
 						<div className="bg-white rounded-lg shadow-lg p-6">
-							<audio ref={audioRef} preload="metadata">
-								<source src={audioUrl} type="audio/mpeg" />
-								Your browser does not support the audio element.
-							</audio>
+							{audioUrl ? (
+								<audio ref={audioRef} preload="metadata">
+									<source src={audioUrl} type="audio/mpeg" />
+									Your browser does not support the audio element.
+								</audio>
+							) : (
+								<audio ref={audioRef} preload="none">
+									{/* No source until audioUrl is available */}
+								</audio>
+							)}
 
 							{/* Progress Bar */}
 							<div
@@ -350,16 +357,8 @@ export default function LectureViewer({
 						{insights && (
 							<div className="bg-white rounded-lg shadow-lg p-6">
 								<h3 className="text-lg font-semibold mb-6">Text Insights</h3>
-
-								<div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-									{/* Summary */}
-									<div>
-										<h4 className="font-medium text-gray-900 mb-2">Summary</h4>
-										<p className="text-sm text-gray-700 leading-relaxed">
-											{insights.summary}
-										</p>
-									</div>
-
+								
+								<div className="grid gap-6">
 									{/* Key Terms */}
 									<div>
 										<h4 className="font-medium text-gray-900 mb-2">
@@ -377,6 +376,16 @@ export default function LectureViewer({
 										</div>
 									</div>
 
+									{/* Summary */}
+									<div>
+										<h4 className="font-medium text-gray-900 mb-2">Summary</h4>
+										<p className="text-sm text-gray-700 leading-relaxed">
+											{insights.summary}
+										</p>
+									</div>
+								</div>
+
+								<div className="grid grid-cols-1 md:grid-cols-2 gap-6">
 									{/* Main Ideas */}
 									<div>
 										<h4 className="font-medium text-gray-900 mb-2">

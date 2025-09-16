@@ -1,13 +1,16 @@
 // API route for fetching lecture data
+
+// /src/app/api/lectures/[id]/route.ts;
+
 import { NextRequest, NextResponse } from "next/server";
 import { lectureService } from "../../../../../utils/supabase";
 
 export async function GET(
 	request: NextRequest,
-	{ params }: { params: { id: string } }
+	{ params }: { params: Promise<{ id: string }> } // Add Promise wrapper
 ) {
 	try {
-		const lectureId = params.id;
+		const { id: lectureId } = await params; // Await params
 
 		if (!lectureId) {
 			return NextResponse.json(
@@ -34,10 +37,10 @@ export async function GET(
 
 export async function PUT(
 	request: NextRequest,
-	{ params }: { params: { id: string } }
+	{ params }: { params: Promise<{ id: string }> } // Add Promise wrapper
 ) {
 	try {
-		const lectureId = params.id;
+		const { id: lectureId } = await params; // Await params
 		const updates = await request.json();
 
 		const success = await lectureService.updateLecture(lectureId, updates);
@@ -61,10 +64,10 @@ export async function PUT(
 
 export async function DELETE(
 	request: NextRequest,
-	{ params }: { params: { id: string } }
+	{ params }: { params: Promise<{ id: string }> } // Add Promise wrapper
 ) {
 	try {
-		const lectureId = params.id;
+		const { id: lectureId } = await params; // Await params
 
 		const success = await lectureService.deleteLecture(lectureId);
 

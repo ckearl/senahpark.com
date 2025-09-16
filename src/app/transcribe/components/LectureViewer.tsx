@@ -453,15 +453,7 @@ export default function LectureViewer() {
 							<div className="bg-white rounded-lg shadow-lg p-6">
 								<h3 className="text-lg font-semibold mb-6">Text Insights</h3>
 
-								<div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-									{/* Summary */}
-									<div>
-										<h4 className="font-medium text-gray-900 mb-2">Summary</h4>
-										<p className="text-sm text-gray-700 leading-relaxed">
-											{insights.summary}
-										</p>
-									</div>
-
+								<div className="grid gap-6">
 									{/* Key Terms */}
 									<div>
 										<h4 className="font-medium text-gray-900 mb-2">
@@ -478,6 +470,18 @@ export default function LectureViewer() {
 											))}
 										</div>
 									</div>
+									
+									{/* Summary */}
+									<div>
+										<h4 className="font-medium text-gray-900 mb-2">Summary</h4>
+										<p className="text-sm text-gray-700 leading-relaxed">
+											{insights.summary}
+										</p>
+									</div>
+
+								</div>
+
+								<div className="grid grid-cols-1 md:grid-cols-2 gap-6">
 
 									{/* Main Ideas */}
 									<div>
