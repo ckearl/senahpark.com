@@ -54,7 +54,7 @@ export async function GET(
 		headers.set("Cache-Control", "public, max-age=3600"); // Cache for 1 hour
 
 		// Convert stream to response
-		const response = new NextResponse(audioStream as any, {
+		const response = new NextResponse(audioStream as ReadableStream, {
 			status: 200,
 			headers,
 		});

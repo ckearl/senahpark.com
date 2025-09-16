@@ -12,7 +12,7 @@ import {
 	Loader2,
 } from "lucide-react";
 import { useLectures, useLecture } from "../../../../hooks/useLectures";
-import { Lecture, TranscriptSegment, TextInsights } from "../../../../types/lecture";
+import { Lecture, TranscriptSegment } from "../../../../types/lecture";
 
 const formatTime = (seconds: number): string => {
 	const mins = Math.floor(seconds / 60);
@@ -46,7 +46,7 @@ export default function LectureViewer({
 	const {
 		lecture: lectureData,
 		loading: lectureLoading,
-		error: lectureError,
+		// error: lectureError,
 	} = useLecture(selectedLectureId);
 
 	const [currentTime, setCurrentTime] = useState(0);
