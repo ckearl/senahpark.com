@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useRef } from "react";
-import { Play, Pause, SkipBack, SkipForward, Volume2 } from "lucide-react";
+import { Play, Pause, SkipBack, SkipForward, Volume2, VolumeX } from "lucide-react";
 
 const formatTime = (seconds: number): string => {
 	const mins = Math.floor(seconds / 60);
@@ -79,6 +79,13 @@ export default function AudioPlayer({
 			audioRef.current.volume = volume;
 		}
 	}, [volume]);
+
+	// Sync currentTime prop with audio element
+	useEffect(() => {
+		if (audioRef.current && Math.abs(audioRef.current.currentTime - currentTime) > 0.5) {
+			audioRef.current.currentTime = currentTime;
+		}
+	}, [currentTime]);
 
 	// Expose audio ref for play/pause control
 	useEffect(() => {
@@ -162,7 +169,11 @@ export default function AudioPlayer({
 
 					<div className="flex items-center group ml-4">
 						<div className="p-2 rounded-full hover:bg-gray-100 transition-colors">
-							<Volume2 className="w-5 h-5 text-gray-500" />
+							{volume === 0 ? (
+								<VolumeX className="w-5 h-5 text-gray-500" />
+							) : (
+								<Volume2 className="w-5 h-5 text-gray-500" />
+							)}
 						</div>
 						<div className="overflow-hidden transition-all duration-300 ease-in-out max-w-0 group-hover:max-w-[6rem] group-hover:ml-2">
 							<input

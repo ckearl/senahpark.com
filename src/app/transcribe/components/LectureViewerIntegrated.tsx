@@ -96,6 +96,56 @@ export default function LectureViewer({
 		}
 	}, [selectedLecture]);
 
+	// Keyboard shortcuts
+	useEffect(() => {
+		const handleKeyPress = (e: KeyboardEvent) => {
+			// Ignore if user is typing in an input field
+			if (
+				e.target instanceof HTMLInputElement ||
+				e.target instanceof HTMLTextAreaElement
+			) {
+				return;
+			}
+
+			switch (e.key.toLowerCase()) {
+				case " ":
+					e.preventDefault();
+					togglePlayPause();
+					break;
+				case "arrowright":
+					e.preventDefault();
+					skipSeconds(10);
+					break;
+				case "arrowleft":
+					e.preventDefault();
+					skipSeconds(-10);
+					break;
+				case "m":
+					e.preventDefault();
+					setVolume((prev) => (prev > 0 ? 0 : 1));
+					break;
+				case "0":
+				case "1":
+				case "2":
+				case "3":
+				case "4":
+				case "5":
+				case "6":
+				case "7":
+				case "8":
+				case "9":
+					e.preventDefault();
+					const digit = parseInt(e.key);
+					const targetTime = (digit / 10) * duration;
+					setCurrentTime(targetTime);
+					break;
+			}
+		};
+
+		window.addEventListener("keydown", handleKeyPress);
+		return () => window.removeEventListener("keydown", handleKeyPress);
+	}, [duration, currentTime]);
+
 	const togglePlayPause = () => {
 		setIsPlaying(!isPlaying);
 	};
