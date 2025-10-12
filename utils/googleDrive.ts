@@ -34,9 +34,12 @@ export class GoogleDriveService {
 		date: string,
 		title: string
 	): Promise<string | null> {
-		const folderId = FOLDER_IDS[classNumber as keyof typeof FOLDER_IDS];
+		// Extract just the course code (e.g., "MBA 530" from "MBA 530 Operations Management")
+		const courseCode = classNumber.split(" ").slice(0, 2).join(" ");
+
+		const folderId = FOLDER_IDS[courseCode as keyof typeof FOLDER_IDS];
 		if (!folderId) {
-			console.error(`No folder ID found for class: ${classNumber}`);
+			console.error(`No folder ID found for class: ${classNumber} (tried: ${courseCode})`);
 			return null;
 		}
 

@@ -130,22 +130,30 @@ export default function LectureViewer({
 		}
 	}, [activeSegmentIndex]);
 
-	// Set audio URL when lecture changes (you'll need to implement audio URL logic)
+	// Set audio URL when lecture changes
 	useEffect(() => {
-		if (selectedLecture) {
+		if (selectedLecture && audioRef.current) {
 			const url = `/api/audio/${selectedLecture.id}`;
 			console.log("Setting audio URL:", url);
 			console.log("Lecture details:", selectedLecture);
 			setAudioUrl(url);
+
+			// Set the src directly and load the audio
+			audioRef.current.src = url;
+			audioRef.current.load();
 		}
 	}, [selectedLecture]);
 
-	const togglePlayPause = () => {
+	const togglePlayPause = async () => {
 		if (audioRef.current) {
-			if (isPlaying) {
-				audioRef.current.pause();
-			} else {
-				audioRef.current.play();
+			try {
+				if (isPlaying) {
+					audioRef.current.pause();
+				} else {
+					await audioRef.current.play();
+				}
+			} catch (error) {
+				console.error("Error playing audio:", error);
 			}
 		}
 	};
@@ -246,16 +254,9 @@ export default function LectureViewer({
 					<div className="lg:col-span-3 space-y-6">
 						{/* Audio Player */}
 						<div className="bg-white rounded-lg shadow-lg p-6">
-							{audioUrl ? (
-								<audio ref={audioRef} preload="metadata">
-									<source src={audioUrl} type="audio/mpeg" />
-									Your browser does not support the audio element.
-								</audio>
-							) : (
-								<audio ref={audioRef} preload="none">
-									{/* No source until audioUrl is available */}
-								</audio>
-							)}
+							<audio ref={audioRef} preload="metadata">
+								Your browser does not support the audio element.
+							</audio>
 
 							{/* Progress Bar */}
 							<div
