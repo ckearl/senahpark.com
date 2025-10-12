@@ -349,24 +349,6 @@ export default function LectureViewer({
 				<div className="hidden md:grid grid-cols-1 lg:grid-cols-4 gap-6">
 					{/* Main Content */}
 					<div className="lg:col-span-3 space-y-6">
-						<AudioPlayer
-							audioUrl={audioUrl}
-							currentTime={currentTime}
-							duration={duration}
-							isPlaying={isPlaying}
-							volume={volume}
-							playbackSpeed={playbackSpeed}
-							showSkipPopover={showSkipPopover}
-							onTimeUpdate={setCurrentTime}
-							onDurationChange={setDuration}
-							onPlayStateChange={setIsPlaying}
-							onSeek={handleSeek}
-							onSkip={skipSeconds}
-							onVolumeChange={handleVolumeChange}
-							onPlaybackSpeedChange={setPlaybackSpeed}
-							onTogglePlayPause={togglePlayPause}
-						/>
-
 						<TranscriptPanel
 							segments={segments}
 							activeSegmentIndex={activeSegmentIndex}
@@ -467,8 +449,8 @@ export default function LectureViewer({
 					</div>
 				</div>
 
-				{/* Sticky Mobile Audio Player */}
-				<div className="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 shadow-lg z-20">
+				{/* Audio Player - only ONE instance */}
+				<div className="fixed bottom-0 left-0 right-0 md:static md:mb-6 bg-white border-t md:border-0 md:rounded-lg border-gray-200 md:shadow-lg shadow-lg z-20 md:z-auto">
 					<AudioPlayer
 						audioUrl={audioUrl}
 						currentTime={currentTime}
