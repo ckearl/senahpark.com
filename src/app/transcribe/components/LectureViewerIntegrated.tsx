@@ -56,6 +56,10 @@ export default function LectureViewer({
 		new Set()
 	);
 	const [audioUrl, setAudioUrl] = useState<string>("");
+	const [showSkipPopover, setShowSkipPopover] = useState<{
+		type: "forward" | "backward" | null;
+		show: boolean;
+	}>({ type: null, show: false });
 
 	const audioRef = useRef<HTMLAudioElement>(null);
 	const segmentRefs = useRef<(HTMLDivElement | null)[]>([]);
@@ -118,7 +122,7 @@ export default function LectureViewer({
 			audio.removeEventListener("play", handlePlay);
 			audio.removeEventListener("pause", handlePause);
 		};
-	}, []);
+	}, [audioUrl]);
 
 	// Auto-scroll to active segment
 	useEffect(() => {
@@ -181,6 +185,17 @@ export default function LectureViewer({
 			const newTime = Math.max(0, Math.min(duration, currentTime + seconds));
 			audioRef.current.currentTime = newTime;
 			setCurrentTime(newTime);
+
+			// Show popover
+			setShowSkipPopover({
+				type: seconds > 0 ? "forward" : "backward",
+				show: true,
+			});
+
+			// Hide popover after 500ms
+			setTimeout(() => {
+				setShowSkipPopover({ type: null, show: false });
+			}, 500);
 		}
 	};
 
@@ -274,12 +289,19 @@ export default function LectureViewer({
 							{/* Controls */}
 							<div className="flex items-center justify-between">
 								<div className="flex items-center space-x-4">
-									<button
-										onClick={() => skipSeconds(-10)}
-										className="p-2 rounded-full bg-gray-100 hover:bg-gray-200"
-									>
-										<SkipBack className="w-5 h-5" />
-									</button>
+									<div className="relative">
+										<button
+											onClick={() => skipSeconds(-10)}
+											className="p-2 rounded-full bg-gray-100 hover:bg-gray-200"
+										>
+											<SkipBack className="w-5 h-5" />
+										</button>
+										{showSkipPopover.show && showSkipPopover.type === "backward" && (
+											<div className="absolute -top-10 left-1/2 transform -translate-x-1/2 bg-gray-800 text-white px-3 py-1 rounded text-sm font-medium whitespace-nowrap animate-fade-in">
+												-10s
+											</div>
+										)}
+									</div>
 
 									<button
 										onClick={togglePlayPause}
@@ -292,12 +314,19 @@ export default function LectureViewer({
 										)}
 									</button>
 
-									<button
-										onClick={() => skipSeconds(10)}
-										className="p-2 rounded-full bg-gray-100 hover:bg-gray-200"
-									>
-										<SkipForward className="w-5 h-5" />
-									</button>
+									<div className="relative">
+										<button
+											onClick={() => skipSeconds(10)}
+											className="p-2 rounded-full bg-gray-100 hover:bg-gray-200"
+										>
+											<SkipForward className="w-5 h-5" />
+										</button>
+										{showSkipPopover.show && showSkipPopover.type === "forward" && (
+											<div className="absolute -top-10 left-1/2 transform -translate-x-1/2 bg-gray-800 text-white px-3 py-1 rounded text-sm font-medium whitespace-nowrap animate-fade-in">
+												+10s
+											</div>
+										)}
+									</div>
 
 									<Volume2 className="w-5 h-5 text-gray-500" />
 								</div>
