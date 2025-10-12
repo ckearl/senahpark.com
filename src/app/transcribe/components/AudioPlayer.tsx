@@ -121,14 +121,14 @@ export default function AudioPlayer({
 	}, [isPlaying]);
 
 	return (
-		<div className="bg-white rounded-lg shadow-lg p-6">
+		<div className="bg-white md:rounded-lg md:shadow-lg p-4 md:p-6">
 			<audio ref={audioRef} preload="metadata">
 				Your browser does not support the audio element.
 			</audio>
 
 			{/* Progress Bar */}
 			<div
-				className="w-full h-2 bg-gray-200 rounded-full mb-4 cursor-pointer"
+				className="w-full h-2 bg-gray-200 rounded-full mb-4 cursor-pointer touch-manipulation"
 				onClick={onSeek}
 			>
 				<div
@@ -139,13 +139,95 @@ export default function AudioPlayer({
 				/>
 			</div>
 
-			{/* Controls */}
-			<div className="flex items-center justify-between">
+			{/* Mobile Layout: Spotify-style */}
+			<div className="md:hidden">
+				{/* Playback Controls - Centered and Large */}
+				<div className="flex items-center justify-center gap-6 mb-4">
+					<div className="relative">
+						<button
+							onClick={() => onSkip(-10)}
+							className="p-3 rounded-full bg-gray-100 hover:bg-gray-200 active:bg-gray-300 touch-manipulation"
+						>
+							<SkipBack className="w-7 h-7" />
+						</button>
+						{showSkipPopover.show && showSkipPopover.type === "backward" && (
+							<div className="absolute -top-10 left-1/2 transform -translate-x-1/2 bg-gray-800 text-white px-3 py-1 rounded text-sm font-medium whitespace-nowrap animate-fade-in">
+								-10s
+							</div>
+						)}
+					</div>
+
+					<button
+						onClick={onTogglePlayPause}
+						className="p-4 rounded-full bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white touch-manipulation"
+					>
+						{isPlaying ? (
+							<Pause className="w-8 h-8" />
+						) : (
+							<Play className="w-8 h-8 ml-0.5" />
+						)}
+					</button>
+
+					<div className="relative">
+						<button
+							onClick={() => onSkip(10)}
+							className="p-3 rounded-full bg-gray-100 hover:bg-gray-200 active:bg-gray-300 touch-manipulation"
+						>
+							<SkipForward className="w-7 h-7" />
+						</button>
+						{showSkipPopover.show && showSkipPopover.type === "forward" && (
+							<div className="absolute -top-10 left-1/2 transform -translate-x-1/2 bg-gray-800 text-white px-3 py-1 rounded text-sm font-medium whitespace-nowrap animate-fade-in">
+								+10s
+							</div>
+						)}
+					</div>
+				</div>
+
+				{/* Time and Speed - Ends */}
+				<div className="flex items-center justify-between text-sm text-gray-600">
+					<div className="whitespace-nowrap">
+						{formatTime(currentTime)} / {formatTime(duration)}
+					</div>
+
+					<div className="relative">
+						<button
+							onClick={() => setShowSpeedMenu(!showSpeedMenu)}
+							className="px-3 py-1.5 rounded-lg bg-gray-100 hover:bg-gray-200 active:bg-gray-300 transition-colors text-sm font-medium text-gray-700 touch-manipulation"
+							title="Playback speed"
+						>
+							{playbackSpeed}x
+						</button>
+						{showSpeedMenu && (
+							<div className="absolute bottom-full mb-2 right-0 bg-white rounded-lg shadow-lg border border-gray-200 py-1 z-10">
+								{speedOptions.map((speed) => (
+									<button
+										key={speed}
+										onClick={() => {
+											onPlaybackSpeedChange(speed);
+											setShowSpeedMenu(false);
+										}}
+										className={`w-full px-4 py-2 text-sm text-left hover:bg-gray-100 transition-colors ${
+											playbackSpeed === speed
+												? "bg-blue-50 text-blue-700 font-medium"
+												: "text-gray-700"
+										}`}
+									>
+										{speed}x
+									</button>
+								))}
+							</div>
+						)}
+					</div>
+				</div>
+			</div>
+
+			{/* Desktop Layout: Original */}
+			<div className="hidden md:flex items-center justify-between">
 				<div className="flex items-center gap-4">
 					<div className="relative">
 						<button
 							onClick={() => onSkip(-10)}
-							className="p-2 rounded-full bg-gray-100 hover:bg-gray-200"
+							className="p-2 rounded-full bg-gray-100 hover:bg-gray-200 active:bg-gray-300 touch-manipulation"
 						>
 							<SkipBack className="w-5 h-5" />
 						</button>
@@ -158,7 +240,7 @@ export default function AudioPlayer({
 
 					<button
 						onClick={onTogglePlayPause}
-						className="p-3 rounded-full bg-blue-600 hover:bg-blue-700 text-white"
+						className="p-3 rounded-full bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white touch-manipulation"
 					>
 						{isPlaying ? (
 							<Pause className="w-6 h-6" />
@@ -170,7 +252,7 @@ export default function AudioPlayer({
 					<div className="relative">
 						<button
 							onClick={() => onSkip(10)}
-							className="p-2 rounded-full bg-gray-100 hover:bg-gray-200"
+							className="p-2 rounded-full bg-gray-100 hover:bg-gray-200 active:bg-gray-300 touch-manipulation"
 						>
 							<SkipForward className="w-5 h-5" />
 						</button>
@@ -184,13 +266,13 @@ export default function AudioPlayer({
 					<div className="relative">
 						<button
 							onClick={() => setShowSpeedMenu(!showSpeedMenu)}
-							className="px-3 py-2 rounded-lg bg-gray-100 hover:bg-gray-200 transition-colors text-sm font-medium text-gray-700"
+							className="px-3 py-2 rounded-lg bg-gray-100 hover:bg-gray-200 active:bg-gray-300 transition-colors text-sm font-medium text-gray-700 touch-manipulation"
 							title="Playback speed"
 						>
 							{playbackSpeed}x
 						</button>
 						{showSpeedMenu && (
-							<div className="absolute top-full mt-2 left-0 bg-white rounded-lg shadow-lg border border-gray-200 py-1 z-10">
+							<div className="absolute bottom-full mb-2 left-0 bg-white rounded-lg shadow-lg border border-gray-200 py-1 z-10">
 								{speedOptions.map((speed) => (
 									<button
 										key={speed}
@@ -233,7 +315,7 @@ export default function AudioPlayer({
 					</div>
 				</div>
 
-				<div className="text-sm text-gray-600">
+				<div className="text-sm text-gray-600 whitespace-nowrap">
 					{formatTime(currentTime)} / {formatTime(duration)}
 				</div>
 			</div>

@@ -23,20 +23,20 @@ export default function LectureSidebar({
 	onLectureSelect,
 }: LectureSidebarProps) {
 	return (
-		<div className="bg-white rounded-lg shadow-lg p-6 sticky top-6">
-			<h3 className="text-lg font-semibold mb-4">All lectures</h3>
-			<div className="space-y-2">
+		<div className="bg-white rounded-lg shadow-lg p-4 md:p-6 md:sticky md:top-6">
+			<h3 className="text-base md:text-lg font-semibold mb-3 md:mb-4">All lectures</h3>
+			<div className="space-y-1.5 md:space-y-2">
 				{lectures.map((lecture) => (
 					<button
 						key={lecture.id}
 						onClick={() => onLectureSelect(lecture)}
-						className={`w-full text-left p-3 rounded-lg transition-colors ${
+						className={`w-full text-left p-2.5 md:p-3 rounded-lg transition-colors touch-manipulation ${
 							selectedLectureId === lecture.id
 								? "bg-blue-100 text-blue-900 border border-blue-200"
-								: "hover:bg-gray-50 text-gray-700"
+								: "hover:bg-gray-50 active:bg-gray-100 text-gray-700"
 						}`}
 					>
-						<div className="font-medium text-sm mb-1">{lecture.title}</div>
+						<div className="font-medium text-xs md:text-sm mb-1">{lecture.title}</div>
 						<div className="text-xs opacity-75">{formatDate(lecture.date)}</div>
 					</button>
 				))}

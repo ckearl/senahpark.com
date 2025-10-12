@@ -72,20 +72,20 @@ export default function LectureLanding({ onLectureSelect }: LectureLandingProps)
 	}
 
 	return (
-		<div className="min-h-screen bg-gray-50 p-6">
+		<div className="min-h-screen bg-gray-50 p-4 md:p-6">
 			<div className="max-w-7xl mx-auto">
 				{/* Header */}
-				<div className="mb-8">
-					<h1 className="text-4xl font-bold text-gray-900 mb-2">
+				<div className="mb-6 md:mb-8">
+					<h1 className="text-2xl md:text-4xl font-bold text-gray-900 mb-1 md:mb-2">
 						Lecture Library
 					</h1>
-					<p className="text-lg text-gray-600">
+					<p className="text-base md:text-lg text-gray-600">
 						Select a class to view available lecture recordings
 					</p>
 				</div>
 
-				{/* Classes Table */}
-				<div className="bg-white rounded-lg shadow-lg overflow-hidden">
+				{/* Desktop: Classes Table */}
+				<div className="hidden md:block bg-white rounded-lg shadow-lg overflow-hidden">
 					<div className="overflow-x-auto">
 						<table className="min-w-full divide-y divide-gray-200">
 							<thead className="bg-gray-50">
@@ -204,9 +204,98 @@ export default function LectureLanding({ onLectureSelect }: LectureLandingProps)
 					</div>
 				</div>
 
+				{/* Mobile: Classes Cards */}
+				<div className="md:hidden space-y-4">
+					{lectures.map((classGroup) => {
+						const metadata = classMetadata[classGroup.class_number];
+						const isExpanded = expandedClasses.has(classGroup.class_number);
+
+						return (
+							<div
+								key={classGroup.class_number}
+								className="bg-white rounded-lg shadow-md overflow-hidden"
+							>
+								<button
+									onClick={() => toggleClassExpansion(classGroup.class_number)}
+									className="w-full p-4 text-left"
+								>
+									<div className="flex items-start justify-between mb-2">
+										<div className="flex-1 min-w-0 pr-3">
+											<h3 className="text-base font-semibold text-gray-900 truncate">
+												{metadata?.course_number || classGroup.class_number}
+											</h3>
+											<p className="text-sm text-gray-500 truncate">
+												{metadata?.course_title || ""}
+											</p>
+										</div>
+										<div className="flex-shrink-0 flex items-center">
+											<span className="px-2 py-1 text-xs font-semibold rounded-full bg-blue-100 text-blue-800">
+												{classGroup.lectures.length}
+											</span>
+											<div className="ml-2">
+												{isExpanded ? (
+													<ChevronDown className="w-5 h-5 text-gray-500" />
+												) : (
+													<ChevronRight className="w-5 h-5 text-gray-500" />
+												)}
+											</div>
+										</div>
+									</div>
+
+									<div className="flex items-center gap-4 text-xs text-gray-500">
+										{metadata?.professor_name && (
+											<div className="flex items-center">
+												<User className="w-3 h-3 mr-1" />
+												{metadata.professor_name}
+											</div>
+										)}
+										{metadata?.days && (
+											<div className="flex items-center">
+												<Calendar className="w-3 h-3 mr-1" />
+												{metadata.days}
+											</div>
+										)}
+									</div>
+								</button>
+
+								{isExpanded && (
+									<div className="border-t border-gray-200 p-4 bg-gray-50">
+										<h4 className="text-sm font-semibold text-gray-700 mb-3">
+											Available Lectures
+										</h4>
+										<div className="space-y-2">
+											{classGroup.lectures.map((lecture: Lecture) => (
+												<button
+													key={lecture.id}
+													onClick={(e) => {
+														e.stopPropagation();
+														onLectureSelect(lecture.id);
+													}}
+													className="w-full text-left p-3 bg-white rounded-lg border border-gray-200 hover:border-blue-500 active:border-blue-600 hover:shadow-sm transition-all"
+												>
+													<div className="text-sm font-medium text-gray-900 mb-1">
+														{lecture.title}
+													</div>
+													<div className="flex items-center justify-between text-xs text-gray-500">
+														<span>{formatDate(lecture.date)}</span>
+														<div className="flex items-center">
+															<Clock className="w-3 h-3 mr-1" />
+															{formatTime(lecture.duration_seconds)}
+														</div>
+													</div>
+												</button>
+											))}
+										</div>
+									</div>
+								)}
+							</div>
+						);
+					})}
+				</div>
+
 				{lectures.length === 0 && (
 					<div className="text-center py-12">
-						<p className="text-gray-500">No lectures available yet.</p>
+						<p className="text-sm md:text-base text-gray-500">No lectures available yet.</p>
 					</div>
 				)}
 			</div>

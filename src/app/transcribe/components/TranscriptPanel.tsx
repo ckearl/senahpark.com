@@ -90,10 +90,10 @@ export default function TranscriptPanel({
 
 	if (loading) {
 		return (
-			<div className="bg-white rounded-lg shadow-lg p-6">
+			<div className="bg-white rounded-lg shadow-lg p-4 md:p-6">
 				<div className="flex items-center space-x-2">
 					<Loader2 className="w-4 h-4 animate-spin" />
-					<span>Loading transcript...</span>
+					<span className="text-sm md:text-base">Loading transcript...</span>
 				</div>
 			</div>
 		);
@@ -101,31 +101,31 @@ export default function TranscriptPanel({
 
 	if (segments.length === 0) {
 		return (
-			<div className="bg-white rounded-lg shadow-lg p-6">
-				<h3 className="text-lg font-semibold mb-4">Transcript</h3>
-				<p className="text-gray-500">No transcript available for this lecture.</p>
+			<div className="bg-white rounded-lg shadow-lg p-4 md:p-6">
+				<h3 className="text-base md:text-lg font-semibold mb-4">Transcript</h3>
+				<p className="text-sm md:text-base text-gray-500">No transcript available for this lecture.</p>
 			</div>
 		);
 	}
 
 	return (
-		<div className="bg-white rounded-lg shadow-lg p-6">
-			<div className="flex items-center justify-between mb-4">
-				<h3 className="text-lg font-semibold">Transcript</h3>
-				<div className="flex items-center space-x-2">
+		<div className="bg-white rounded-lg shadow-lg p-4 md:p-6">
+			<div className="flex items-center justify-between mb-3 md:mb-4">
+				<h3 className="text-base md:text-lg font-semibold">Transcript</h3>
+				<div className="flex items-center gap-1 md:gap-2">
 					<button
 						onClick={handleSearchToggle}
-						className="p-2 rounded-lg text-gray-600 hover:bg-gray-100 transition-colors"
+						className="p-1.5 md:p-2 rounded-lg text-gray-600 hover:bg-gray-100 active:bg-gray-200 transition-colors touch-manipulation"
 						title="Search transcript"
 					>
 						<Search className="w-4 h-4" />
 					</button>
 					<button
 						onClick={() => setAutoScroll(!autoScroll)}
-						className={`flex items-center space-x-2 px-3 py-1.5 rounded-lg text-sm font-medium transition-all ${
+						className={`flex items-center gap-1 md:gap-2 px-2 md:px-3 py-1 md:py-1.5 rounded-lg text-xs md:text-sm font-medium transition-all touch-manipulation ${
 							autoScroll
-								? "bg-blue-100 text-blue-700 hover:bg-blue-200"
-								: "bg-gray-100 text-gray-600 hover:bg-gray-200"
+								? "bg-blue-100 text-blue-700 hover:bg-blue-200 active:bg-blue-300"
+								: "bg-gray-100 text-gray-600 hover:bg-gray-200 active:bg-gray-300"
 						} ${
 							shouldPulse
 								? "animate-pulse-glow"
@@ -133,8 +133,8 @@ export default function TranscriptPanel({
 						}`}
 						title={autoScroll ? "Auto-scroll enabled" : "Auto-scroll disabled"}
 					>
-						<Radio className="w-4 h-4" />
-						<span>{autoScroll ? "Following" : "Paused"}</span>
+						<Radio className="w-3 h-3 md:w-4 md:h-4" />
+						<span className="hidden sm:inline">{autoScroll ? "Following" : "Paused"}</span>
 					</button>
 				</div>
 			</div>
@@ -171,7 +171,7 @@ export default function TranscriptPanel({
 				</div>
 			)}
 
-			<div className="space-y-4 max-h-96 overflow-y-auto">
+			<div className="space-y-2 md:space-y-4 max-h-[60vh] md:max-h-96 overflow-y-auto">
 				{filteredSegments.length > 0 ? (
 					filteredSegments.map((segment, index) => {
 						const originalIndex = segments.indexOf(segment);
@@ -181,18 +181,18 @@ export default function TranscriptPanel({
 								ref={(el) => {
 									segmentRefs.current[index] = el;
 								}}
-								className={`p-3 rounded-lg cursor-pointer transition-colors ${
+								className={`p-2 md:p-3 rounded-lg cursor-pointer transition-colors touch-manipulation ${
 									originalIndex === activeSegmentIndex
 										? "bg-blue-100 border-l-4 border-blue-600"
-										: "bg-gray-50 hover:bg-gray-100"
+										: "bg-gray-50 hover:bg-gray-100 active:bg-gray-200"
 								}`}
 								onClick={() => onSegmentClick(segment)}
 							>
-								<div className="flex items-start space-x-3">
-									<span className="text-xs text-gray-500 font-mono mt-1 min-w-16">
+								<div className="flex items-start gap-2 md:gap-3">
+									<span className="text-xs text-gray-500 font-mono mt-0.5 md:mt-1 min-w-12 md:min-w-16">
 										{formatTime(segment.start_time)}
 									</span>
-									<p className="text-sm text-gray-800 leading-relaxed">
+									<p className="text-xs md:text-sm text-gray-800 leading-relaxed">
 										{segment.text}
 									</p>
 								</div>
@@ -200,7 +200,7 @@ export default function TranscriptPanel({
 						);
 					})
 				) : (
-					<div className="text-center py-8 text-gray-500">
+					<div className="text-center py-8 text-sm md:text-base text-gray-500">
 						No results found for &quot;{searchQuery}&quot;
 					</div>
 				)}
