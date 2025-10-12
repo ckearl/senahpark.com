@@ -15,6 +15,7 @@ interface AudioPlayerProps {
 	duration: number;
 	isPlaying: boolean;
 	volume: number;
+	playbackSpeed: number;
 	showSkipPopover: { type: "forward" | "backward" | null; show: boolean };
 	onTimeUpdate: (time: number) => void;
 	onDurationChange: (duration: number) => void;
@@ -22,6 +23,7 @@ interface AudioPlayerProps {
 	onSeek: (e: React.MouseEvent<HTMLDivElement>) => void;
 	onSkip: (seconds: number) => void;
 	onVolumeChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+	onPlaybackSpeedChange: (speed: number) => void;
 	onTogglePlayPause: () => void;
 }
 
@@ -31,6 +33,7 @@ export default function AudioPlayer({
 	duration,
 	isPlaying,
 	volume,
+	playbackSpeed,
 	showSkipPopover,
 	onTimeUpdate,
 	onDurationChange,
@@ -38,9 +41,13 @@ export default function AudioPlayer({
 	onSeek,
 	onSkip,
 	onVolumeChange,
+	onPlaybackSpeedChange,
 	onTogglePlayPause,
 }: AudioPlayerProps) {
 	const audioRef = useRef<HTMLAudioElement>(null);
+	const [showSpeedMenu, setShowSpeedMenu] = React.useState(false);
+
+	const speedOptions = [0.5, 1, 1.25, 1.5, 2, 3];
 
 	// Audio event handlers
 	useEffect(() => {
@@ -86,6 +93,13 @@ export default function AudioPlayer({
 			audioRef.current.currentTime = currentTime;
 		}
 	}, [currentTime]);
+
+	// Update playback speed
+	useEffect(() => {
+		if (audioRef.current) {
+			audioRef.current.playbackRate = playbackSpeed;
+		}
+	}, [playbackSpeed]);
 
 	// Expose audio ref for play/pause control
 	useEffect(() => {
@@ -163,6 +177,36 @@ export default function AudioPlayer({
 						{showSkipPopover.show && showSkipPopover.type === "forward" && (
 							<div className="absolute -top-10 left-1/2 transform -translate-x-1/2 bg-gray-800 text-white px-3 py-1 rounded text-sm font-medium whitespace-nowrap animate-fade-in">
 								+10s
+							</div>
+						)}
+					</div>
+
+					<div className="relative ml-4">
+						<button
+							onClick={() => setShowSpeedMenu(!showSpeedMenu)}
+							className="px-3 py-2 rounded-lg bg-gray-100 hover:bg-gray-200 transition-colors text-sm font-medium text-gray-700"
+							title="Playback speed"
+						>
+							{playbackSpeed}x
+						</button>
+						{showSpeedMenu && (
+							<div className="absolute top-full mt-2 left-0 bg-white rounded-lg shadow-lg border border-gray-200 py-1 z-10">
+								{speedOptions.map((speed) => (
+									<button
+										key={speed}
+										onClick={() => {
+											onPlaybackSpeedChange(speed);
+											setShowSpeedMenu(false);
+										}}
+										className={`w-full px-4 py-2 text-sm text-left hover:bg-gray-100 transition-colors ${
+											playbackSpeed === speed
+												? "bg-blue-50 text-blue-700 font-medium"
+												: "text-gray-700"
+										}`}
+									>
+										{speed}x
+									</button>
+								))}
 							</div>
 						)}
 					</div>

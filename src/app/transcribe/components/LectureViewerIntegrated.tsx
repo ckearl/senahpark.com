@@ -50,6 +50,7 @@ export default function LectureViewer({
 		show: boolean;
 	}>({ type: null, show: false });
 	const [volume, setVolume] = useState(1);
+	const [playbackSpeed, setPlaybackSpeed] = useState(1);
 
 	// Set initial expanded classes when lectures load
 	useEffect(() => {
@@ -259,6 +260,7 @@ export default function LectureViewer({
 							duration={duration}
 							isPlaying={isPlaying}
 							volume={volume}
+							playbackSpeed={playbackSpeed}
 							showSkipPopover={showSkipPopover}
 							onTimeUpdate={setCurrentTime}
 							onDurationChange={setDuration}
@@ -266,6 +268,7 @@ export default function LectureViewer({
 							onSeek={handleSeek}
 							onSkip={skipSeconds}
 							onVolumeChange={handleVolumeChange}
+							onPlaybackSpeedChange={setPlaybackSpeed}
 							onTogglePlayPause={togglePlayPause}
 						/>
 
