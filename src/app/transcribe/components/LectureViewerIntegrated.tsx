@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { Loader2 } from "lucide-react";
+import { Loader2, Keyboard } from "lucide-react";
 import { useLectures, useLecture } from "../../../../hooks/useLectures";
 import { Lecture, TranscriptSegment } from "../../../../types/lecture";
 import AudioPlayer from "./AudioPlayer";
@@ -9,6 +9,7 @@ import TranscriptPanel from "./TranscriptPanel";
 import InsightsPanel from "./InsightsPanel";
 import LectureSidebar from "./LectureSidebar";
 import ClassList from "./ClassList";
+import KeyboardShortcutsModal from "./KeyboardShortcutsModal";
 
 const formatDate = (dateString: string): string => {
 	return new Date(dateString).toLocaleDateString("en-US", {
@@ -51,6 +52,8 @@ export default function LectureViewer({
 	}>({ type: null, show: false });
 	const [volume, setVolume] = useState(1);
 	const [playbackSpeed, setPlaybackSpeed] = useState(1);
+	const [showShortcutsModal, setShowShortcutsModal] = useState(false);
+	const [searchToggleCounter, setSearchToggleCounter] = useState(0);
 
 	// Set initial expanded classes when lectures load
 	useEffect(() => {
@@ -108,6 +111,13 @@ export default function LectureViewer({
 				return;
 			}
 
+			// Show shortcuts modal on ? key
+			if (e.key === "?") {
+				e.preventDefault();
+				setShowShortcutsModal(true);
+				return;
+			}
+
 			switch (e.key.toLowerCase()) {
 				case " ":
 					e.preventDefault();
@@ -121,9 +131,48 @@ export default function LectureViewer({
 					e.preventDefault();
 					skipSeconds(-10);
 					break;
+				case "arrowup":
+					e.preventDefault();
+					skipSeconds(30);
+					break;
+				case "arrowdown":
+					e.preventDefault();
+					skipSeconds(-30);
+					break;
+				case "j":
+					e.preventDefault();
+					skipSeconds(-10);
+					break;
+				case "k":
+					e.preventDefault();
+					togglePlayPause();
+					break;
+				case "l":
+					e.preventDefault();
+					skipSeconds(10);
+					break;
 				case "m":
 					e.preventDefault();
 					setVolume((prev) => (prev > 0 ? 0 : 1));
+					break;
+				case "f":
+					e.preventDefault();
+					// Trigger search toggle by updating state
+					setSearchToggleCounter((prev) => prev + 1);
+					break;
+				case ",":
+					e.preventDefault();
+					if (isPlaying) {
+						togglePlayPause();
+					}
+					skipSeconds(-1 / 30); // Go back one frame (assuming 30fps)
+					break;
+				case ".":
+					e.preventDefault();
+					if (isPlaying) {
+						togglePlayPause();
+					}
+					skipSeconds(1 / 30); // Go forward one frame
 					break;
 				case "0":
 				case "1":
@@ -243,12 +292,21 @@ export default function LectureViewer({
 		<div className="min-h-screen bg-gray-50 p-6">
 			<div className="max-w-7xl mx-auto">
 				{/* Header */}
-				<div className="mb-6">
-					<h1 className="text-3xl font-bold text-gray-900 mb-2">
-						{selectedLecture.class_number} Operations Management |{" "}
-						{formatDate(selectedLecture.date)}
-					</h1>
-					<h2 className="text-xl text-gray-600">{selectedLecture.title}</h2>
+				<div className="mb-6 flex items-start justify-between">
+					<div>
+						<h1 className="text-3xl font-bold text-gray-900 mb-2">
+							{selectedLecture.class_number} Operations Management |{" "}
+							{formatDate(selectedLecture.date)}
+						</h1>
+						<h2 className="text-xl text-gray-600">{selectedLecture.title}</h2>
+					</div>
+					<button
+						onClick={() => setShowShortcutsModal(true)}
+						className="p-2.5 bg-white rounded-lg shadow-sm hover:shadow-md transition-all text-gray-700 hover:text-blue-600 border border-gray-200 hover:border-blue-300"
+						title="Keyboard shortcuts (Press ?)"
+					>
+						<Keyboard className="w-5 h-5" />
+					</button>
 				</div>
 
 				<div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
@@ -278,6 +336,7 @@ export default function LectureViewer({
 							loading={lectureLoading}
 							isPlaying={isPlaying}
 							onSegmentClick={handleSegmentClick}
+							searchToggleTrigger={searchToggleCounter}
 						/>
 
 						<InsightsPanel insights={insights} />
@@ -301,6 +360,12 @@ export default function LectureViewer({
 					</div>
 				</div>
 			</div>
+
+			{/* Keyboard Shortcuts Modal */}
+			<KeyboardShortcutsModal
+				isOpen={showShortcutsModal}
+				onClose={() => setShowShortcutsModal(false)}
+			/>
 		</div>
 	);
 }

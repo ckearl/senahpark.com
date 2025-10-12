@@ -16,6 +16,7 @@ interface TranscriptPanelProps {
 	loading: boolean;
 	isPlaying?: boolean;
 	onSegmentClick: (segment: TranscriptSegment) => void;
+	searchToggleTrigger?: number;
 }
 
 export default function TranscriptPanel({
@@ -24,6 +25,7 @@ export default function TranscriptPanel({
 	loading,
 	isPlaying = false,
 	onSegmentClick,
+	searchToggleTrigger,
 }: TranscriptPanelProps) {
 	const segmentRefs = useRef<(HTMLDivElement | null)[]>([]);
 	const [autoScroll, setAutoScroll] = useState(true);
@@ -71,6 +73,13 @@ export default function TranscriptPanel({
 		}
 		setSearchExpanded(!searchExpanded);
 	};
+
+	// React to external search toggle trigger
+	useEffect(() => {
+		if (searchToggleTrigger && searchToggleTrigger > 0) {
+			handleSearchToggle();
+		}
+	}, [searchToggleTrigger]);
 
 	const handleSearchClear = () => {
 		setSearchQuery("");
