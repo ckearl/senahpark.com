@@ -60,6 +60,7 @@ export default function LectureViewer({
 		type: "forward" | "backward" | null;
 		show: boolean;
 	}>({ type: null, show: false });
+	const [volume, setVolume] = useState(1);
 
 	const audioRef = useRef<HTMLAudioElement>(null);
 	const segmentRefs = useRef<(HTMLDivElement | null)[]>([]);
@@ -148,6 +149,13 @@ export default function LectureViewer({
 		}
 	}, [selectedLecture]);
 
+	// Update audio volume when volume state changes
+	useEffect(() => {
+		if (audioRef.current) {
+			audioRef.current.volume = volume;
+		}
+	}, [volume]);
+
 	const togglePlayPause = async () => {
 		if (audioRef.current) {
 			try {
@@ -197,6 +205,11 @@ export default function LectureViewer({
 				setShowSkipPopover({ type: null, show: false });
 			}, 500);
 		}
+	};
+
+	const handleVolumeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+		const newVolume = parseFloat(e.target.value);
+		setVolume(newVolume);
 	};
 
 	const handleLectureSelect = (lecture: Lecture) => {
@@ -296,11 +309,12 @@ export default function LectureViewer({
 										>
 											<SkipBack className="w-5 h-5" />
 										</button>
-										{showSkipPopover.show && showSkipPopover.type === "backward" && (
-											<div className="absolute -top-10 left-1/2 transform -translate-x-1/2 bg-gray-800 text-white px-3 py-1 rounded text-sm font-medium whitespace-nowrap animate-fade-in">
-												-10s
-											</div>
-										)}
+										{showSkipPopover.show &&
+											showSkipPopover.type === "backward" && (
+												<div className="absolute -top-10 left-1/2 transform -translate-x-1/2 bg-gray-800 text-white px-3 py-1 rounded text-sm font-medium whitespace-nowrap animate-fade-in">
+													-10s
+												</div>
+											)}
 									</div>
 
 									<button
@@ -321,14 +335,30 @@ export default function LectureViewer({
 										>
 											<SkipForward className="w-5 h-5" />
 										</button>
-										{showSkipPopover.show && showSkipPopover.type === "forward" && (
-											<div className="absolute -top-10 left-1/2 transform -translate-x-1/2 bg-gray-800 text-white px-3 py-1 rounded text-sm font-medium whitespace-nowrap animate-fade-in">
-												+10s
-											</div>
-										)}
+										{showSkipPopover.show &&
+											showSkipPopover.type === "forward" && (
+												<div className="absolute -top-10 left-1/2 transform -translate-x-1/2 bg-gray-800 text-white px-3 py-1 rounded text-sm font-medium whitespace-nowrap animate-fade-in">
+													+10s
+												</div>
+											)}
 									</div>
 
-									<Volume2 className="w-5 h-5 text-gray-500" />
+									<div className="flex items-center group ml-4">
+										<div className="p-2 rounded-full hover:bg-gray-100 transition-colors">
+											<Volume2 className="w-5 h-5 text-gray-500" />
+										</div>
+										<div className="overflow-hidden transition-all duration-300 ease-in-out max-w-0 group-hover:max-w-[6rem] group-hover:ml-2">
+											<input
+												type="range"
+												min="0"
+												max="1"
+												step="0.01"
+												value={volume}
+												onChange={handleVolumeChange}
+												className="w-24 h-1.5 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-blue-600"
+											/>
+										</div>
+									</div>
 								</div>
 
 								<div className="text-sm text-gray-600">
@@ -387,7 +417,7 @@ export default function LectureViewer({
 						{insights && (
 							<div className="bg-white rounded-lg shadow-lg p-6">
 								<h3 className="text-lg font-semibold mb-6">Text Insights</h3>
-								
+
 								<div className="grid gap-6">
 									{/* Key Terms */}
 									<div>
