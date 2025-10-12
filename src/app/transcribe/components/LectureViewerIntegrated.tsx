@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Loader2, Keyboard } from "lucide-react";
 import { useLectures, useLecture } from "../../../../hooks/useLectures";
 import { Lecture, TranscriptSegment } from "../../../../types/lecture";
@@ -10,6 +10,11 @@ import InsightsPanel from "./InsightsPanel";
 import LectureSidebar from "./LectureSidebar";
 import ClassList from "./ClassList";
 import KeyboardShortcutsModal from "./KeyboardShortcutsModal";
+import {
+	saveLectureProgress,
+	getLectureProgress,
+	shouldResetProgress,
+} from "../../../utils/progressStorage";
 
 const formatDate = (dateString: string): string => {
 	return new Date(dateString).toLocaleDateString("en-US", {
@@ -54,6 +59,7 @@ export default function LectureViewer({
 	const [playbackSpeed, setPlaybackSpeed] = useState(1);
 	const [showShortcutsModal, setShowShortcutsModal] = useState(false);
 	const [searchToggleCounter, setSearchToggleCounter] = useState(0);
+	const hasLoadedProgress = useRef<Set<string>>(new Set());
 
 	// Set initial expanded classes when lectures load
 	useEffect(() => {
@@ -92,13 +98,43 @@ export default function LectureViewer({
 		);
 	});
 
-	// Set audio URL when lecture changes
+	// Set audio URL when lecture changes and load saved progress
 	useEffect(() => {
 		if (selectedLecture) {
 			const url = `/api/audio/${selectedLecture.id}`;
 			setAudioUrl(url);
+
+			// Only load saved progress if we haven't already loaded it for this lecture
+			if (!hasLoadedProgress.current.has(selectedLecture.id)) {
+				const savedProgress = getLectureProgress(selectedLecture.id);
+				if (savedProgress !== null && savedProgress > 0) {
+					setCurrentTime(savedProgress);
+				} else {
+					setCurrentTime(0);
+				}
+				hasLoadedProgress.current.add(selectedLecture.id);
+			}
 		}
 	}, [selectedLecture]);
+
+	// Save progress to cookies whenever currentTime changes (with debouncing)
+	useEffect(() => {
+		if (selectedLecture && currentTime > 0 && duration > 0) {
+			// Use a timeout to debounce saves (only save after user stops seeking)
+			const saveTimeout = setTimeout(() => {
+				// Check if lecture is complete (95% or more)
+				if (shouldResetProgress(currentTime, duration)) {
+					// Reset progress if lecture is essentially complete
+					saveLectureProgress(selectedLecture.id, 0);
+				} else {
+					// Save progress rounded to nearest 10 seconds
+					saveLectureProgress(selectedLecture.id, currentTime);
+				}
+			}, 500); // Wait 500ms after last change before saving
+
+			return () => clearTimeout(saveTimeout);
+		}
+	}, [currentTime, selectedLecture, duration]);
 
 	// Keyboard shortcuts
 	useEffect(() => {
