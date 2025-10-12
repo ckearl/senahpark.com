@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { ArrowLeft } from "lucide-react";
 import LectureViewer from "@/app/transcribe/components/LectureViewerIntegrated";
 import LectureLanding from "@/app/transcribe/components/LectureLanding";
 
@@ -12,9 +13,10 @@ export default function LecturePage() {
 			<div>
 				<button
 					onClick={() => setSelectedLectureId(null)}
-					className="fixed top-6 left-6 z-50 px-4 py-2 bg-white rounded-lg shadow-lg hover:shadow-xl transition-shadow text-sm font-medium text-gray-700 hover:text-gray-900"
+					className="fixed top-6 left-6 z-50 p-3 bg-white rounded-full shadow-lg hover:shadow-xl transition-all hover:bg-gray-50"
+					title="Back to Library"
 				>
-					← Back to Library
+					<ArrowLeft className="w-5 h-5 text-gray-700" />
 				</button>
 				<LectureViewer initialLectureId={selectedLectureId} />
 			</div>

@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useEffect, useRef } from "react";
-import { Loader2 } from "lucide-react";
+import React, { useEffect, useRef, useState } from "react";
+import { Loader2, Radio } from "lucide-react";
 import { TranscriptSegment } from "../../../../types/lecture";
 
 const formatTime = (seconds: number): string => {
@@ -24,16 +24,17 @@ export default function TranscriptPanel({
 	onSegmentClick,
 }: TranscriptPanelProps) {
 	const segmentRefs = useRef<(HTMLDivElement | null)[]>([]);
+	const [autoScroll, setAutoScroll] = useState(true);
 
 	// Auto-scroll to active segment
 	useEffect(() => {
-		if (activeSegmentIndex >= 0 && segmentRefs.current[activeSegmentIndex]) {
+		if (autoScroll && activeSegmentIndex >= 0 && segmentRefs.current[activeSegmentIndex]) {
 			segmentRefs.current[activeSegmentIndex]?.scrollIntoView({
 				behavior: "smooth",
 				block: "center",
 			});
 		}
-	}, [activeSegmentIndex]);
+	}, [activeSegmentIndex, autoScroll]);
 
 	if (loading) {
 		return (
@@ -57,7 +58,21 @@ export default function TranscriptPanel({
 
 	return (
 		<div className="bg-white rounded-lg shadow-lg p-6">
-			<h3 className="text-lg font-semibold mb-4">Transcript</h3>
+			<div className="flex items-center justify-between mb-4">
+				<h3 className="text-lg font-semibold">Transcript</h3>
+				<button
+					onClick={() => setAutoScroll(!autoScroll)}
+					className={`flex items-center space-x-2 px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${
+						autoScroll
+							? "bg-blue-100 text-blue-700 hover:bg-blue-200"
+							: "bg-gray-100 text-gray-600 hover:bg-gray-200"
+					}`}
+					title={autoScroll ? "Auto-scroll enabled" : "Auto-scroll disabled"}
+				>
+					<Radio className="w-4 h-4" />
+					<span>{autoScroll ? "Following" : "Paused"}</span>
+				</button>
+			</div>
 			<div className="space-y-4 max-h-96 overflow-y-auto">
 				{segments.map((segment, index) => (
 					<div
