@@ -329,12 +329,12 @@ export default function LectureViewer({
 		<div className="min-h-screen bg-gray-50 md:p-6 pb-24 md:pb-6">
 			<div className="max-w-7xl mx-auto">
 				{/* Header */}
-				<div className="mb-4 md:mb-6 flex items-start justify-between px-4 md:px-0 pt-4 md:pt-0">
+				<div className="mb-4 md:mb-6 flex items-start justify-between pl-16 pr-4 xl:pl-0 pt-4 md:pt-0">
 					<div className="flex-1 min-w-0 pr-3">
 						<h1 className="text-lg md:text-3xl font-bold text-gray-900 mb-1 md:mb-2 truncate">
-							{selectedLecture.class_number} <span className="hidden sm:inline">Operations Management</span> | {formatDate(selectedLecture.date)}
+							{selectedLecture.class_number} <span className="hidden sm:inline">Operations Management</span>
 						</h1>
-						<h2 className="text-sm md:text-xl text-gray-600 truncate">{selectedLecture.title}</h2>
+						<h2 className="text-sm md:text-xl text-gray-600 truncate">{selectedLecture.title} • {formatDate(selectedLecture.date)}</h2>
 					</div>
 					<button
 						onClick={() => setShowShortcutsModal(true)}
@@ -344,6 +344,28 @@ export default function LectureViewer({
 						<Keyboard className="w-4 h-4 md:w-5 md:h-5" />
 					</button>
 				</div>
+
+				{/* Audio Player - only ONE instance */}
+				<div className="fixed bottom-0 left-0 right-0 md:static md:mb-6 bg-white border-t md:border-0 md:rounded-lg border-gray-200 md:shadow-lg shadow-lg z-20 md:z-auto">
+					<AudioPlayer
+						audioUrl={audioUrl}
+						currentTime={currentTime}
+						duration={duration}
+						isPlaying={isPlaying}
+						volume={volume}
+						playbackSpeed={playbackSpeed}
+						showSkipPopover={showSkipPopover}
+						onTimeUpdate={setCurrentTime}
+						onDurationChange={setDuration}
+						onPlayStateChange={setIsPlaying}
+						onSeek={handleSeek}
+						onSkip={skipSeconds}
+						onVolumeChange={handleVolumeChange}
+						onPlaybackSpeedChange={setPlaybackSpeed}
+						onTogglePlayPause={togglePlayPause}
+					/>
+				</div>
+
 
 				{/* Desktop Layout */}
 				<div className="hidden md:grid grid-cols-1 lg:grid-cols-4 gap-6">
@@ -449,26 +471,6 @@ export default function LectureViewer({
 					</div>
 				</div>
 
-				{/* Audio Player - only ONE instance */}
-				<div className="fixed bottom-0 left-0 right-0 md:static md:mb-6 bg-white border-t md:border-0 md:rounded-lg border-gray-200 md:shadow-lg shadow-lg z-20 md:z-auto">
-					<AudioPlayer
-						audioUrl={audioUrl}
-						currentTime={currentTime}
-						duration={duration}
-						isPlaying={isPlaying}
-						volume={volume}
-						playbackSpeed={playbackSpeed}
-						showSkipPopover={showSkipPopover}
-						onTimeUpdate={setCurrentTime}
-						onDurationChange={setDuration}
-						onPlayStateChange={setIsPlaying}
-						onSeek={handleSeek}
-						onSkip={skipSeconds}
-						onVolumeChange={handleVolumeChange}
-						onPlaybackSpeedChange={setPlaybackSpeed}
-						onTogglePlayPause={togglePlayPause}
-					/>
-				</div>
 			</div>
 
 			{/* Keyboard Shortcuts Modal */}

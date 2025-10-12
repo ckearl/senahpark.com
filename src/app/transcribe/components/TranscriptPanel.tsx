@@ -115,14 +115,14 @@ export default function TranscriptPanel({
 				<div className="flex items-center gap-1 md:gap-2">
 					<button
 						onClick={handleSearchToggle}
-						className="p-1.5 md:p-2 rounded-lg text-gray-600 hover:bg-gray-100 active:bg-gray-200 transition-colors touch-manipulation"
+						className="p-2.5 md:p-2 rounded-lg text-gray-600 hover:bg-gray-100 active:bg-gray-200 transition-colors touch-manipulation"
 						title="Search transcript"
 					>
-						<Search className="w-4 h-4" />
+						<Search className="w-5 h-5 md:w-4 md:h-4" />
 					</button>
 					<button
 						onClick={() => setAutoScroll(!autoScroll)}
-						className={`flex items-center gap-1 md:gap-2 px-2 md:px-3 py-1 md:py-1.5 rounded-lg text-xs md:text-sm font-medium transition-all touch-manipulation ${
+						className={`flex items-center gap-1.5 md:gap-2 px-3 md:px-3 py-2 md:py-1.5 rounded-lg text-sm md:text-sm font-medium transition-all touch-manipulation ${
 							autoScroll
 								? "bg-blue-100 text-blue-700 hover:bg-blue-200 active:bg-blue-300"
 								: "bg-gray-100 text-gray-600 hover:bg-gray-200 active:bg-gray-300"
@@ -133,7 +133,7 @@ export default function TranscriptPanel({
 						}`}
 						title={autoScroll ? "Auto-scroll enabled" : "Auto-scroll disabled"}
 					>
-						<Radio className="w-3 h-3 md:w-4 md:h-4" />
+						<Radio className="w-4 h-4" />
 						<span className="hidden sm:inline">{autoScroll ? "Following" : "Paused"}</span>
 					</button>
 				</div>

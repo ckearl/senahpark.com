@@ -13,7 +13,7 @@ export default function LecturePage() {
 			<div>
 				<button
 					onClick={() => setSelectedLectureId(null)}
-					className="fixed top-6 left-6 z-50 p-3 bg-white rounded-full shadow-lg hover:shadow-xl transition-all hover:bg-gray-50"
+					className="fixed top-6 left-4 md:left-6 z-50 p-3 bg-white rounded-full shadow-lg hover:shadow-xl transition-all hover:bg-gray-50"
 					title="Back to Library"
 				>
 					<ArrowLeft className="w-5 h-5 text-gray-700" />
