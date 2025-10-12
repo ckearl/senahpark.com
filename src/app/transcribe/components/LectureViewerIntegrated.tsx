@@ -276,6 +276,7 @@ export default function LectureViewer({
 							segments={segments}
 							activeSegmentIndex={activeSegmentIndex}
 							loading={lectureLoading}
+							isPlaying={isPlaying}
 							onSegmentClick={handleSegmentClick}
 						/>
 
