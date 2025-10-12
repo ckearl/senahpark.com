@@ -1,24 +1,14 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from "react";
-import {
-	Play,
-	Pause,
-	SkipBack,
-	SkipForward,
-	Volume2,
-	ChevronDown,
-	ChevronRight,
-	Loader2,
-} from "lucide-react";
+import React, { useState, useEffect } from "react";
+import { Loader2 } from "lucide-react";
 import { useLectures, useLecture } from "../../../../hooks/useLectures";
 import { Lecture, TranscriptSegment } from "../../../../types/lecture";
-
-const formatTime = (seconds: number): string => {
-	const mins = Math.floor(seconds / 60);
-	const secs = Math.floor(seconds % 60);
-	return `${mins}:${secs.toString().padStart(2, "0")}`;
-};
+import AudioPlayer from "./AudioPlayer";
+import TranscriptPanel from "./TranscriptPanel";
+import InsightsPanel from "./InsightsPanel";
+import LectureSidebar from "./LectureSidebar";
+import ClassList from "./ClassList";
 
 const formatDate = (dateString: string): string => {
 	return new Date(dateString).toLocaleDateString("en-US", {
@@ -46,7 +36,6 @@ export default function LectureViewer({
 	const {
 		lecture: lectureData,
 		loading: lectureLoading,
-		// error: lectureError,
 	} = useLecture(selectedLectureId);
 
 	const [currentTime, setCurrentTime] = useState(0);
@@ -61,9 +50,6 @@ export default function LectureViewer({
 		show: boolean;
 	}>({ type: null, show: false });
 	const [volume, setVolume] = useState(1);
-
-	const audioRef = useRef<HTMLAudioElement>(null);
-	const segmentRefs = useRef<(HTMLDivElement | null)[]>([]);
 
 	// Set initial expanded classes when lectures load
 	useEffect(() => {
@@ -102,109 +88,46 @@ export default function LectureViewer({
 		);
 	});
 
-	// Audio event handlers
-	useEffect(() => {
-		const audio = audioRef.current;
-		if (!audio) return;
-
-		const handleTimeUpdate = () => setCurrentTime(audio.currentTime);
-		const handleLoadedMetadata = () => setDuration(audio.duration);
-		const handlePlay = () => setIsPlaying(true);
-		const handlePause = () => setIsPlaying(false);
-
-		audio.addEventListener("timeupdate", handleTimeUpdate);
-		audio.addEventListener("loadedmetadata", handleLoadedMetadata);
-		audio.addEventListener("play", handlePlay);
-		audio.addEventListener("pause", handlePause);
-
-		return () => {
-			audio.removeEventListener("timeupdate", handleTimeUpdate);
-			audio.removeEventListener("loadedmetadata", handleLoadedMetadata);
-			audio.removeEventListener("play", handlePlay);
-			audio.removeEventListener("pause", handlePause);
-		};
-	}, [audioUrl]);
-
-	// Auto-scroll to active segment
-	useEffect(() => {
-		if (activeSegmentIndex >= 0 && segmentRefs.current[activeSegmentIndex]) {
-			segmentRefs.current[activeSegmentIndex]?.scrollIntoView({
-				behavior: "smooth",
-				block: "center",
-			});
-		}
-	}, [activeSegmentIndex]);
-
 	// Set audio URL when lecture changes
 	useEffect(() => {
-		if (selectedLecture && audioRef.current) {
+		if (selectedLecture) {
 			const url = `/api/audio/${selectedLecture.id}`;
-			console.log("Setting audio URL:", url);
-			console.log("Lecture details:", selectedLecture);
 			setAudioUrl(url);
-
-			// Set the src directly and load the audio
-			audioRef.current.src = url;
-			audioRef.current.load();
 		}
 	}, [selectedLecture]);
 
-	// Update audio volume when volume state changes
-	useEffect(() => {
-		if (audioRef.current) {
-			audioRef.current.volume = volume;
-		}
-	}, [volume]);
-
-	const togglePlayPause = async () => {
-		if (audioRef.current) {
-			try {
-				if (isPlaying) {
-					audioRef.current.pause();
-				} else {
-					await audioRef.current.play();
-				}
-			} catch (error) {
-				console.error("Error playing audio:", error);
-			}
-		}
+	const togglePlayPause = () => {
+		setIsPlaying(!isPlaying);
 	};
 
 	const handleSeek = (e: React.MouseEvent<HTMLDivElement>) => {
-		if (!audioRef.current || !duration) return;
+		if (!duration) return;
 
 		const rect = e.currentTarget.getBoundingClientRect();
 		const clickX = e.clientX - rect.left;
 		const newTime = (clickX / rect.width) * duration;
 
-		audioRef.current.currentTime = newTime;
 		setCurrentTime(newTime);
 	};
 
 	const handleSegmentClick = (segment: TranscriptSegment) => {
-		if (audioRef.current) {
-			audioRef.current.currentTime = segment.start_time;
-			setCurrentTime(segment.start_time);
-		}
+		setCurrentTime(segment.start_time);
 	};
 
 	const skipSeconds = (seconds: number) => {
-		if (audioRef.current) {
-			const newTime = Math.max(0, Math.min(duration, currentTime + seconds));
-			audioRef.current.currentTime = newTime;
-			setCurrentTime(newTime);
+		const newTime = Math.max(0, Math.min(duration, currentTime + seconds));
+		setCurrentTime(newTime);
 
-			// Show popover
-			setShowSkipPopover({
-				type: seconds > 0 ? "forward" : "backward",
-				show: true,
-			});
+		// Show popover
+		setShowSkipPopover({
+			type: seconds > 0 ? "forward" : "backward",
+			show: true,
+		});
 
-			// Hide popover after 500ms
-			setTimeout(() => {
-				setShowSkipPopover({ type: null, show: false });
-			}, 500);
-		}
+		// Hide popover after 500ms
+		setTimeout(() => {
+			setShowSkipPopover({ type: null, show: false });
+		}, 500);
 	};
 
 	const handleVolumeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -280,287 +203,47 @@ export default function LectureViewer({
 				<div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
 					{/* Main Content */}
 					<div className="lg:col-span-3 space-y-6">
-						{/* Audio Player */}
-						<div className="bg-white rounded-lg shadow-lg p-6">
-							<audio ref={audioRef} preload="metadata">
-								Your browser does not support the audio element.
-							</audio>
+						<AudioPlayer
+							audioUrl={audioUrl}
+							currentTime={currentTime}
+							duration={duration}
+							isPlaying={isPlaying}
+							volume={volume}
+							showSkipPopover={showSkipPopover}
+							onTimeUpdate={setCurrentTime}
+							onDurationChange={setDuration}
+							onPlayStateChange={setIsPlaying}
+							onSeek={handleSeek}
+							onSkip={skipSeconds}
+							onVolumeChange={handleVolumeChange}
+							onTogglePlayPause={togglePlayPause}
+						/>
 
-							{/* Progress Bar */}
-							<div
-								className="w-full h-2 bg-gray-200 rounded-full mb-4 cursor-pointer"
-								onClick={handleSeek}
-							>
-								<div
-									className="h-full bg-blue-600 rounded-full transition-all duration-100"
-									style={{
-										width: `${duration ? (currentTime / duration) * 100 : 0}%`,
-									}}
-								/>
-							</div>
+						<TranscriptPanel
+							segments={segments}
+							activeSegmentIndex={activeSegmentIndex}
+							loading={lectureLoading}
+							onSegmentClick={handleSegmentClick}
+						/>
 
-							{/* Controls */}
-							<div className="flex items-center justify-between">
-								<div className="flex items-center space-x-4">
-									<div className="relative">
-										<button
-											onClick={() => skipSeconds(-10)}
-											className="p-2 rounded-full bg-gray-100 hover:bg-gray-200"
-										>
-											<SkipBack className="w-5 h-5" />
-										</button>
-										{showSkipPopover.show &&
-											showSkipPopover.type === "backward" && (
-												<div className="absolute -top-10 left-1/2 transform -translate-x-1/2 bg-gray-800 text-white px-3 py-1 rounded text-sm font-medium whitespace-nowrap animate-fade-in">
-													-10s
-												</div>
-											)}
-									</div>
+						<InsightsPanel insights={insights} />
 
-									<button
-										onClick={togglePlayPause}
-										className="p-3 rounded-full bg-blue-600 hover:bg-blue-700 text-white"
-									>
-										{isPlaying ? (
-											<Pause className="w-6 h-6" />
-										) : (
-											<Play className="w-6 h-6" />
-										)}
-									</button>
-
-									<div className="relative">
-										<button
-											onClick={() => skipSeconds(10)}
-											className="p-2 rounded-full bg-gray-100 hover:bg-gray-200"
-										>
-											<SkipForward className="w-5 h-5" />
-										</button>
-										{showSkipPopover.show &&
-											showSkipPopover.type === "forward" && (
-												<div className="absolute -top-10 left-1/2 transform -translate-x-1/2 bg-gray-800 text-white px-3 py-1 rounded text-sm font-medium whitespace-nowrap animate-fade-in">
-													+10s
-												</div>
-											)}
-									</div>
-
-									<div className="flex items-center group ml-4">
-										<div className="p-2 rounded-full hover:bg-gray-100 transition-colors">
-											<Volume2 className="w-5 h-5 text-gray-500" />
-										</div>
-										<div className="overflow-hidden transition-all duration-300 ease-in-out max-w-0 group-hover:max-w-[6rem] group-hover:ml-2">
-											<input
-												type="range"
-												min="0"
-												max="1"
-												step="0.01"
-												value={volume}
-												onChange={handleVolumeChange}
-												className="w-24 h-1.5 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-blue-600"
-											/>
-										</div>
-									</div>
-								</div>
-
-								<div className="text-sm text-gray-600">
-									{formatTime(currentTime)} / {formatTime(duration)}
-								</div>
-							</div>
-						</div>
-
-						{/* Transcript */}
-						{lectureLoading ? (
-							<div className="bg-white rounded-lg shadow-lg p-6">
-								<div className="flex items-center space-x-2">
-									<Loader2 className="w-4 h-4 animate-spin" />
-									<span>Loading transcript...</span>
-								</div>
-							</div>
-						) : segments.length > 0 ? (
-							<div className="bg-white rounded-lg shadow-lg p-6">
-								<h3 className="text-lg font-semibold mb-4">Transcript</h3>
-								<div className="space-y-4 max-h-96 overflow-y-auto">
-									{segments.map((segment, index) => (
-										<div
-											key={segment.id}
-											ref={(el) => {
-												segmentRefs.current[index] = el;
-											}}
-											className={`p-3 rounded-lg cursor-pointer transition-colors ${
-												activeSegmentIndex === index
-													? "bg-blue-100 border-l-4 border-blue-600"
-													: "bg-gray-50 hover:bg-gray-100"
-											}`}
-											onClick={() => handleSegmentClick(segment)}
-										>
-											<div className="flex items-start space-x-3">
-												<span className="text-xs text-gray-500 font-mono mt-1 min-w-16">
-													{formatTime(segment.start_time)}
-												</span>
-												<p className="text-sm text-gray-800 leading-relaxed">
-													{segment.text}
-												</p>
-											</div>
-										</div>
-									))}
-								</div>
-							</div>
-						) : (
-							<div className="bg-white rounded-lg shadow-lg p-6">
-								<h3 className="text-lg font-semibold mb-4">Transcript</h3>
-								<p className="text-gray-500">
-									No transcript available for this lecture.
-								</p>
-							</div>
-						)}
-
-						{/* Text Insights */}
-						{insights && (
-							<div className="bg-white rounded-lg shadow-lg p-6">
-								<h3 className="text-lg font-semibold mb-6">Text Insights</h3>
-
-								<div className="grid gap-6">
-									{/* Key Terms */}
-									<div>
-										<h4 className="font-medium text-gray-900 mb-2">
-											Key Terms
-										</h4>
-										<div className="flex flex-wrap gap-2">
-											{insights.key_terms.map((term, index) => (
-												<span
-													key={index}
-													className="px-3 py-1 bg-blue-100 text-blue-800 text-xs rounded-full"
-												>
-													{term}
-												</span>
-											))}
-										</div>
-									</div>
-
-									{/* Summary */}
-									<div>
-										<h4 className="font-medium text-gray-900 mb-2">Summary</h4>
-										<p className="text-sm text-gray-700 leading-relaxed">
-											{insights.summary}
-										</p>
-									</div>
-								</div>
-
-								<div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-									{/* Main Ideas */}
-									<div>
-										<h4 className="font-medium text-gray-900 mb-2">
-											Main Ideas
-										</h4>
-										<ul className="space-y-1">
-											{insights.main_ideas.map((idea, index) => (
-												<li
-													key={index}
-													className="text-sm text-gray-700 flex items-start"
-												>
-													<span className="w-1.5 h-1.5 bg-gray-400 rounded-full mt-2 mr-2 flex-shrink-0" />
-													{idea}
-												</li>
-											))}
-										</ul>
-									</div>
-
-									{/* Review Questions */}
-									<div>
-										<h4 className="font-medium text-gray-900 mb-2">
-											Questions for Review
-										</h4>
-										<ul className="space-y-1">
-											{insights.review_questions.map((question, index) => (
-												<li
-													key={index}
-													className="text-sm text-gray-700 flex items-start"
-												>
-													<span className="text-blue-600 mr-2 flex-shrink-0">
-														Q{index + 1}:
-													</span>
-													{question}
-												</li>
-											))}
-										</ul>
-									</div>
-								</div>
-							</div>
-						)}
-
-						{/* All Classes */}
-						<div className="bg-white rounded-lg shadow-lg p-6">
-							<h3 className="text-lg font-semibold mb-4">All Classes</h3>
-							<div className="space-y-2">
-								{lectures.map((classGroup) => (
-									<div key={classGroup.class_number}>
-										<button
-											onClick={() =>
-												toggleClassExpansion(classGroup.class_number)
-											}
-											className="w-full flex items-center justify-between p-3 text-left hover:bg-gray-50 rounded-lg"
-										>
-											<span className="font-medium text-gray-900">
-												{classGroup.class_number}
-											</span>
-											{expandedClasses.has(classGroup.class_number) ? (
-												<ChevronDown className="w-4 h-4" />
-											) : (
-												<ChevronRight className="w-4 h-4" />
-											)}
-										</button>
-
-										{expandedClasses.has(classGroup.class_number) && (
-											<div className="ml-4 space-y-1">
-												{classGroup.lectures.map((lecture) => (
-													<button
-														key={lecture.id}
-														onClick={() => handleLectureSelect(lecture)}
-														className={`w-full text-left p-2 rounded text-sm hover:bg-gray-50 ${
-															selectedLecture?.id === lecture.id
-																? "bg-blue-50 text-blue-700 border-l-2 border-blue-600 pl-3"
-																: "text-gray-600"
-														}`}
-													>
-														<div className="font-medium">{lecture.title}</div>
-														<div className="text-xs opacity-75">
-															{formatDate(lecture.date)} •{" "}
-															{formatTime(lecture.duration_seconds)}
-														</div>
-													</button>
-												))}
-											</div>
-										)}
-									</div>
-								))}
-							</div>
-						</div>
+						<ClassList
+							lectures={lectures}
+							expandedClasses={expandedClasses}
+							selectedLectureId={selectedLecture?.id}
+							onToggleClassExpansion={toggleClassExpansion}
+							onLectureSelect={handleLectureSelect}
+						/>
 					</div>
 
 					{/* Sidebar */}
 					<div className="lg:col-span-1">
-						<div className="bg-white rounded-lg shadow-lg p-6 sticky top-6">
-							<h3 className="text-lg font-semibold mb-4">All lectures</h3>
-							<div className="space-y-2">
-								{currentClassLectures.map((lecture) => (
-									<button
-										key={lecture.id}
-										onClick={() => handleLectureSelect(lecture)}
-										className={`w-full text-left p-3 rounded-lg transition-colors ${
-											selectedLecture?.id === lecture.id
-												? "bg-blue-100 text-blue-900 border border-blue-200"
-												: "hover:bg-gray-50 text-gray-700"
-										}`}
-									>
-										<div className="font-medium text-sm mb-1">
-											{lecture.title}
-										</div>
-										<div className="text-xs opacity-75">
-											{formatDate(lecture.date)}
-										</div>
-									</button>
-								))}
-							</div>
-						</div>
+						<LectureSidebar
+							lectures={currentClassLectures}
+							selectedLectureId={selectedLecture?.id}
+							onLectureSelect={handleLectureSelect}
+						/>
 					</div>
 				</div>
 			</div>
