@@ -15,13 +15,27 @@ export class GoogleDriveService {
 	private drive: any;
 
 	constructor() {
+		// Better error logging for debugging
+		const email = process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL;
+		const privateKey = process.env.GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY;
+
+		if (!email || !privateKey) {
+			console.error("Missing Google credentials:", {
+				hasEmail: !!email,
+				hasPrivateKey: !!privateKey,
+				emailValue: email ? "present" : "missing",
+				privateKeyLength: privateKey?.length || 0,
+			});
+			throw new Error("Google service account credentials are not configured");
+		}
+
+		// Handle the private key - replace literal \n with actual newlines
+		const formattedPrivateKey = privateKey.replace(/\\n/g, "\n");
+
 		const auth = new google.auth.GoogleAuth({
 			credentials: {
-				client_email: process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL,
-				private_key: process.env.GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY?.replace(
-					/\\n/g,
-					"\n"
-				),
+				client_email: email,
+				private_key: formattedPrivateKey,
 			},
 			scopes: ["https://www.googleapis.com/auth/drive.readonly"],
 		});
@@ -39,7 +53,9 @@ export class GoogleDriveService {
 
 		const folderId = FOLDER_IDS[courseCode as keyof typeof FOLDER_IDS];
 		if (!folderId) {
-			console.error(`No folder ID found for class: ${classNumber} (tried: ${courseCode})`);
+			console.error(
+				`No folder ID found for class: ${classNumber} (tried: ${courseCode})`
+			);
 			return null;
 		}
 
@@ -76,6 +92,9 @@ export class GoogleDriveService {
 				});
 
 				if (matchedFile) {
+					console.log(
+						`Found audio file: ${matchedFile.name} (ID: ${matchedFile.id})`
+					);
 					return matchedFile.id;
 				}
 			}
@@ -88,6 +107,20 @@ export class GoogleDriveService {
 					fileName.includes(titleForFile.toLowerCase())
 				);
 			});
+
+			if (partialMatch) {
+				console.log(
+					`Found partial match: ${partialMatch.name} (ID: ${partialMatch.id})`
+				);
+			} else {
+				console.error(
+					`No audio file found for: ${classNumber} - ${title} (${date})`
+				);
+				console.error(
+					`Available files in folder:`,
+					files.map((f: any) => f.name)
+				);
+			}
 
 			return partialMatch?.id || null;
 		} catch (error) {
