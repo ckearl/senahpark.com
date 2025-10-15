@@ -100,43 +100,10 @@ export default function LectureViewer({
 	});
 
 	// Set audio URL when lecture changes and load saved progress
-	// useEffect(() => {
-	// 	if (selectedLecture) {
-	// 		const url = `/api/audio/${selectedLecture.id}`;
-	// 		setAudioUrl(url);
-
-	// 		// Only load saved progress if we haven't already loaded it for this lecture
-	// 		if (!hasLoadedProgress.current.has(selectedLecture.id)) {
-	// 			const savedProgress = getLectureProgress(selectedLecture.id);
-	// 			if (savedProgress !== null && savedProgress > 0) {
-	// 				setCurrentTime(savedProgress);
-	// 			} else {
-	// 				setCurrentTime(0);
-	// 			}
-	// 			hasLoadedProgress.current.add(selectedLecture.id);
-	// 		}
-	// 	}
-	// }, [selectedLecture]);
-
 	useEffect(() => {
 		if (selectedLecture) {
-			// Fetch the signed URL from your API
-			const fetchAudioUrl = async () => {
-				try {
-					const response = await fetch(`/api/audio/${selectedLecture.id}`);
-					const data = await response.json();
-
-					if (data.audioUrl) {
-						setAudioUrl(data.audioUrl);
-					} else {
-						console.error("Failed to get audio URL:", data.error);
-					}
-				} catch (error) {
-					console.error("Error fetching audio URL:", error);
-				}
-			};
-
-			fetchAudioUrl();
+			const url = `/api/audio/${selectedLecture.id}`;
+			setAudioUrl(url);
 
 			// Only load saved progress if we haven't already loaded it for this lecture
 			if (!hasLoadedProgress.current.has(selectedLecture.id)) {
@@ -150,6 +117,39 @@ export default function LectureViewer({
 			}
 		}
 	}, [selectedLecture]);
+
+	// useEffect(() => {
+	// 	if (selectedLecture) {
+	// 		// Fetch the signed URL from your API
+	// 		const fetchAudioUrl = async () => {
+	// 			try {
+	// 				const response = await fetch(`/api/audio/${selectedLecture.id}`);
+	// 				const data = await response.json();
+
+	// 				if (data.audioUrl) {
+	// 					setAudioUrl(data.audioUrl);
+	// 				} else {
+	// 					console.error("Failed to get audio URL:", data.error);
+	// 				}
+	// 			} catch (error) {
+	// 				console.error("Error fetching audio URL:", error);
+	// 			}
+	// 		};
+
+	// 		fetchAudioUrl();
+
+	// 		// Only load saved progress if we haven't already loaded it for this lecture
+	// 		if (!hasLoadedProgress.current.has(selectedLecture.id)) {
+	// 			const savedProgress = getLectureProgress(selectedLecture.id);
+	// 			if (savedProgress !== null && savedProgress > 0) {
+	// 				setCurrentTime(savedProgress);
+	// 			} else {
+	// 				setCurrentTime(0);
+	// 			}
+	// 			hasLoadedProgress.current.add(selectedLecture.id);
+	// 		}
+	// 	}
+	// }, [selectedLecture]);
 
 	// Save progress to cookies whenever currentTime changes (with debouncing)
 	useEffect(() => {
