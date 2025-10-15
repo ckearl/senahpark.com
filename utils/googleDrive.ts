@@ -16,8 +16,9 @@ export class GoogleDriveService {
 
 	constructor() {
 		// Better error logging for debugging
-		const email = process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL;
-		const privateKey = process.env.GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY;
+		const email = process.env.NEXT_PUBLIC_GOOGLE_SERVICE_ACCOUNT_EMAIL;
+		const privateKey =
+			process.env.NEXT_PUBLIC_GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY;
 
 		if (!email || !privateKey) {
 			console.error("Missing Google credentials:", {
