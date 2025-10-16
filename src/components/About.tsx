@@ -1,7 +1,5 @@
 'use client';
 
-import { Download } from 'lucide-react';
-
 const About = () => {
   const education = [
     {

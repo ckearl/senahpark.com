@@ -15,24 +15,6 @@ export default function ProjectPage({
 	const { slug } = use(params);
 	const project = projectData[slug as keyof typeof projectData];
 
-	if (!project) {
-		return (
-			<div className="min-h-screen flex items-center justify-center">
-				<div className="text-center">
-					<h1 className="text-4xl font-[family-name:var(--font-shrikhand)] text-gray-700 mb-4">
-						Project Not Found
-					</h1>
-					<Link
-						href="/"
-						className="text-[var(--color-pink)] hover:text-[var(--color-red)] transition-colors"
-					>
-						Go back home
-					</Link>
-				</div>
-			</div>
-		);
-	}
-
 	// Get all project slugs for navigation
 	const projectSlugs = Object.keys(projectData);
 	const currentIndex = projectSlugs.indexOf(slug);
@@ -67,6 +49,24 @@ export default function ProjectPage({
 			elements.forEach((el) => observer.unobserve(el));
 		};
 	}, []);
+
+	if (!project) {
+		return (
+			<div className="min-h-screen flex items-center justify-center">
+				<div className="text-center">
+					<h1 className="text-4xl font-[family-name:var(--font-shrikhand)] text-gray-700 mb-4">
+						Project Not Found
+					</h1>
+					<Link
+						href="/"
+						className="text-[var(--color-pink)] hover:text-[var(--color-red)] transition-colors"
+					>
+						Go back home
+					</Link>
+				</div>
+			</div>
+		);
+	}
 
 	return (
 		<main className="min-h-screen">
