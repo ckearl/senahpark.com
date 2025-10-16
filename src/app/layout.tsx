@@ -1,14 +1,24 @@
 import type { Metadata, Viewport } from "next";
-import { Inter } from "next/font/google";
+import { Inter, Shrikhand } from "next/font/google";
 import "./globals.css";
 
-const inter = Inter({ subsets: ["latin"] });
+const inter = Inter({
+  subsets: ["latin"],
+  weight: ["300", "400", "500"],
+  variable: "--font-inter",
+});
+
+const shrikhand = Shrikhand({
+  subsets: ["latin"],
+  weight: ["400"],
+  variable: "--font-shrikhand",
+});
 
 export const metadata: Metadata = {
-  title: "Senah Park - Portfolio",
-  description: "Professional portfolio showcasing my work, skills, and experience",
-  keywords: ["portfolio", "developer", "designer", "creative", "professional"],
-  authors: [{ name: "Senah Park" }],
+  title: "Senah Park Kearl - Portfolio",
+  description: "MBA student specializing in Finance and Brand Management",
+  keywords: ["portfolio", "finance", "brand management", "MBA", "professional"],
+  authors: [{ name: "Senah Park Kearl" }],
 };
 
 export const viewport: Viewport = {
@@ -23,7 +33,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="scroll-smooth">
-      <body className={`${inter.className} antialiased`}>
+      <body className={`${inter.variable} ${shrikhand.variable} antialiased`}>
         {children}
       </body>
     </html>

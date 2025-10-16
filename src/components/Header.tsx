@@ -1,110 +1,98 @@
-// Header.tsx
+'use client';
 
-"use client";
-
-import { useState, useEffect } from "react";
-import { motion } from "framer-motion";
-import { Menu, X } from "lucide-react";
+import Image from 'next/image';
+import Link from 'next/link';
+import { useState } from 'react';
 
 const Header = () => {
-	const [isMenuOpen, setIsMenuOpen] = useState(false);
-	const [scrolled, setScrolled] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-	useEffect(() => {
-		const handleScroll = () => {
-			setScrolled(window.scrollY > 50);
-		};
+  const navItems = [
+    { name: 'Home', href: '/' },
+    { name: 'About', href: '/about' },
+    { name: 'Contact', href: '/contact' },
+  ];
 
-		window.addEventListener("scroll", handleScroll);
-		return () => window.removeEventListener("scroll", handleScroll);
-	}, []);
+  return (
+    <nav className="fixed top-0 left-0 right-0 z-50 bg-white/30 backdrop-blur-sm">
+      <div className="container mx-auto px-6 py-4">
+        <div className="flex justify-between items-center">
+          {/* Logo */}
+          <Link href="/" className="flex-shrink-0">
+            <Image
+              src="/img/newsenahsig.png"
+              alt="Senah Park Kearl"
+              width={120}
+              height={60}
+              className="w-auto h-12 hover:opacity-80 transition-opacity duration-300"
+            />
+          </Link>
 
-	const navItems = [
-		{ name: "Home", href: "#home" },
-		{ name: "About", href: "#about" },
-		{ name: "Skills", href: "#skills" },
-		{ name: "Projects", href: "#projects" },
-		{ name: "Contact", href: "#contact" },
-	];
+          {/* Desktop Navigation */}
+          <ul className="hidden md:flex gap-8 font-[family-name:var(--font-inter)] font-light">
+            {navItems.map((item) => (
+              <li key={item.name}>
+                <Link
+                  href={item.href}
+                  className="text-gray-700 hover:text-[var(--color-pink)] transition-colors duration-300"
+                >
+                  {item.name}
+                </Link>
+              </li>
+            ))}
+          </ul>
 
-	const scrollToSection = (href: string) => {
-		const element = document.querySelector(href);
-		if (element) {
-			element.scrollIntoView({ behavior: "smooth" });
-		}
-		setIsMenuOpen(false);
-	};
+          {/* Mobile menu button */}
+          <button
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+            className="md:hidden text-gray-700 hover:text-[var(--color-pink)] transition-colors"
+          >
+            <svg
+              className="w-6 h-6"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              {isMenuOpen ? (
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M6 18L18 6M6 6l12 12"
+                />
+              ) : (
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M4 6h16M4 12h16M4 18h16"
+                />
+              )}
+            </svg>
+          </button>
+        </div>
 
-	return (
-		<motion.header
-			initial={{ y: -100 }}
-			animate={{ y: 0 }}
-			className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-				scrolled
-					? "bg-white/90 dark:bg-gray-900/90 backdrop-blur-md shadow-lg dark:shadow-gray-700/25"
-					: "bg-transparent"
-			}`}
-		>
-			<div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-				<div className="flex justify-between items-center h-16">
-					{/* Logo */}
-					<motion.div whileHover={{ scale: 1.05 }} className="flex-shrink-0">
-						<h1 className="text-2xl font-bold gradient-text">Senah Park</h1>
-					</motion.div>
-
-					{/* Desktop Navigation */}
-					<nav className="hidden md:flex space-x-8">
-						{navItems.map((item) => (
-							<motion.button
-								key={item.name}
-								whileHover={{ scale: 1.05 }}
-								whileTap={{ scale: 0.95 }}
-								onClick={() => scrollToSection(item.href)}
-								className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-200 font-medium"
-							>
-								{item.name}
-							</motion.button>
-						))}
-					</nav>
-
-					{/* Mobile menu button */}
-					<div className="md:hidden">
-						<motion.button
-							whileTap={{ scale: 0.95 }}
-							onClick={() => setIsMenuOpen(!isMenuOpen)}
-							className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-200"
-						>
-							{isMenuOpen ? <X size={24} /> : <Menu size={24} />}
-						</motion.button>
-					</div>
-				</div>
-
-				{/* Mobile Navigation */}
-				{isMenuOpen && (
-					<motion.nav
-						initial={{ opacity: 0, y: -20 }}
-						animate={{ opacity: 1, y: 0 }}
-						exit={{ opacity: 0, y: -20 }}
-						className="md:hidden bg-white/95 dark:bg-gray-900/95 backdrop-blur-md rounded-lg shadow-lg dark:shadow-gray-700/25 mt-2 py-4"
-					>
-						<div className="flex flex-col space-y-4 px-4">
-							{navItems.map((item) => (
-								<motion.button
-									key={item.name}
-									whileHover={{ scale: 1.02 }}
-									whileTap={{ scale: 0.98 }}
-									onClick={() => scrollToSection(item.href)}
-									className="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-200 font-medium text-left"
-								>
-									{item.name}
-								</motion.button>
-							))}
-						</div>
-					</motion.nav>
-				)}
-			</div>
-		</motion.header>
-	);
+        {/* Mobile Navigation */}
+        {isMenuOpen && (
+          <div className="md:hidden mt-4 bg-white/90 backdrop-blur-md rounded-lg shadow-lg p-4">
+            <ul className="flex flex-col gap-4 font-[family-name:var(--font-inter)] font-light">
+              {navItems.map((item) => (
+                <li key={item.name}>
+                  <Link
+                    href={item.href}
+                    onClick={() => setIsMenuOpen(false)}
+                    className="text-gray-700 hover:text-[var(--color-pink)] transition-colors duration-300 block"
+                  >
+                    {item.name}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+      </div>
+    </nav>
+  );
 };
 
 export default Header;
