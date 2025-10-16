@@ -5,6 +5,13 @@ import ProjectCard from './ProjectCard';
 const Projects = () => {
   return (
     <div className="py-10">
+      {/* Projects Title */}
+      <div className="section-fade-in text-center mb-16 scroll-mt-20" id="projects">
+        <h2 className="text-3xl md:text-4xl font-[family-name:var(--font-shrikhand)] text-gray-700 mb-6">
+          Projects
+        </h2>
+      </div>
+
       <ProjectCard
         title="Freshly Picked"
         category="ux/ui"

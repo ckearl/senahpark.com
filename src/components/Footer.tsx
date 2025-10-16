@@ -48,9 +48,9 @@ const Footer = () => {
               <Image
                 src="/img/newsenahsig.png"
                 alt="Senah Park Kearl"
-                width={150}
-                height={75}
-                className="w-auto h-20"
+                width={200}
+                height={100}
+                className="w-auto h-24"
               />
             </Link>
             <div className="font-[family-name:var(--font-inter)] font-light text-gray-600">
@@ -64,7 +64,7 @@ const Footer = () => {
           </div>
 
           {/* Social Icons and Back to Top */}
-          <div className="flex flex-col items-center gap-6">
+          <div className="flex flex-col items-center gap-6 self-end pb-4">
             {/* Social Icons */}
             <div className="flex gap-4">
               {socialLinks.map((social) => (

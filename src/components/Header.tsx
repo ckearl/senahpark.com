@@ -9,7 +9,7 @@ const Header = () => {
 
   const navItems = [
     { name: 'Home', href: '/' },
-    { name: 'About', href: '/about' },
+    { name: 'About', href: '#about' },
     { name: 'Contact', href: '#footer' },
   ];
 
@@ -19,6 +19,13 @@ const Header = () => {
       const footer = document.querySelector('footer');
       if (footer) {
         footer.scrollIntoView({ behavior: 'smooth' });
+      }
+      setIsMenuOpen(false);
+    } else if (href === '#about') {
+      e.preventDefault();
+      const about = document.querySelector('#about');
+      if (about) {
+        about.scrollIntoView({ behavior: 'smooth' });
       }
       setIsMenuOpen(false);
     }
@@ -33,9 +40,9 @@ const Header = () => {
             <Image
               src="/img/newsenahsig.png"
               alt="Senah Park Kearl"
-              width={150}
-              height={75}
-              className="w-auto h-16 hover:opacity-80 transition-opacity duration-300"
+              width={200}
+              height={100}
+              className="w-auto h-20 hover:opacity-80 transition-opacity duration-300"
             />
           </Link>
 

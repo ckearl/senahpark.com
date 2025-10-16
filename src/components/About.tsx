@@ -30,7 +30,7 @@ const About = () => {
   ];
 
   return (
-    <section id="about" className="py-20">
+    <section id="about" className="py-20 scroll-mt-20">
       <div className="container mx-auto px-6">
         <div className="max-w-4xl mx-auto">
           {/* About Summary */}
@@ -54,7 +54,7 @@ const About = () => {
               </h3>
               <div className="space-y-6">
                 {education.map((item, index) => (
-                  <div key={index} className="border-l-4 border-[var(--color-pink)] pl-4">
+                  <div key={index} className="border-l-4 border-[var(--color-pink)] rounded-l-lg pl-4">
                     <h4 className="font-[family-name:var(--font-inter)] font-medium text-gray-800">
                       {item.degree}
                     </h4>
@@ -76,7 +76,7 @@ const About = () => {
               </h3>
               <div className="space-y-6">
                 {experience.map((item, index) => (
-                  <div key={index} className="border-l-4 border-[var(--color-pink)] pl-4">
+                  <div key={index} className="border-l-4 border-[var(--color-pink)] rounded-l-lg pl-4">
                     <h4 className="font-[family-name:var(--font-inter)] font-medium text-gray-800">
                       {item.role}
                     </h4>
