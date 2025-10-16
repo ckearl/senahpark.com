@@ -63,7 +63,7 @@ export default function ProjectPage({ params }: { params: Promise<{ slug: string
       <Header />
 
       {/* Hero Section */}
-      <section className="min-h-[95vh] pt-32 pb-20 bg-white/40">
+      <section className="pt-32 pb-12 bg-white/40">
         <div className="container mx-auto px-6">
           <div className="grid lg:grid-cols-5 gap-12 items-center">
             {/* Logo */}
@@ -153,15 +153,15 @@ export default function ProjectPage({ params }: { params: Promise<{ slug: string
 
                 return (
                   <div key={index} className="relative flex gap-8">
+                    {/* Timeline Circle - Positioned at center of image */}
+                    <div
+                      className="absolute left-[1.35rem] w-6 h-6 rounded-full border-4 bg-white z-10"
+                      style={{ borderColor: circleColor, top: 'calc(33.333% + 0rem)' }}
+                    />
+
                     {/* Content Container */}
                     <div className="flex-1 ml-20">
                       <div className="section-fade-in relative">
-                        {/* Timeline Circle - Positioned at center of image */}
-                        <div
-                          className="absolute -left-[5.5rem] top-1/3 w-6 h-6 rounded-full border-4 bg-white z-10"
-                          style={{ borderColor: circleColor }}
-                        />
-
                         {/* Image */}
                         <div className="mb-6">
                           <div className="relative overflow-hidden rounded-2xl shadow-lg transition-all duration-300 hover:shadow-2xl hover:scale-[1.02] hover:-translate-y-1">
