@@ -33,7 +33,7 @@ export default function ProjectCard({
           {/* Image */}
           <div className="section-fade-in">
             <Link href={href} className="block group">
-              <div className="relative overflow-hidden rounded-3xl border-[15px] border-[var(--color-pink-border)] transition-transform duration-300 group-hover:scale-105">
+              <div className="relative overflow-hidden rounded-2xl shadow-lg transition-all duration-300 group-hover:shadow-2xl group-hover:scale-[1.02] group-hover:-translate-y-1">
                 <Image
                   src={imageSrc}
                   alt={title}

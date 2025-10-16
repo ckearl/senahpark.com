@@ -11,20 +11,20 @@ const Hero = () => {
   }, []);
 
   return (
-    <section className="min-h-screen flex flex-col items-center justify-center relative pt-20">
+    <section className="min-h-screen flex flex-col items-center justify-center relative pt-20 -mt-16">
       <div className="text-center px-4">
         <div className={`${mounted ? 'drawing-animation' : 'opacity-0'}`}>
           <Image
             src="/img/hi-index.png"
             alt="Hi, it's nice to meet you"
-            width={800}
-            height={300}
-            className="w-full max-w-2xl mx-auto"
+            width={600}
+            height={225}
+            className="w-full max-w-lg mx-auto"
             priority
           />
         </div>
         <h4
-          className={`mt-8 text-xl md:text-2xl font-[family-name:var(--font-shrikhand)] text-gray-700 ${
+          className={`mt-6 text-xl md:text-2xl font-[family-name:var(--font-shrikhand)] text-gray-700 ${
             mounted ? 'animate-fade-in' : 'opacity-0'
           }`}
           style={{ animationDelay: '1.5s', animationFillMode: 'forwards' }}

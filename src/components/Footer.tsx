@@ -41,29 +41,30 @@ const Footer = () => {
   return (
     <footer className="min-h-[30vh] bg-transparent py-16">
       <div className="container mx-auto px-6">
-        <div className="flex flex-col md:flex-row items-center justify-between gap-8">
-          {/* Logo */}
-          <div className="flex-shrink-0">
-            <Link href="/">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 items-center">
+          {/* Logo & Contact Info */}
+          <div className="flex flex-col gap-4">
+            <Link href="/" className="w-fit">
               <Image
                 src="/img/newsenahsig.png"
                 alt="Senah Park Kearl"
-                width={120}
-                height={60}
-                className="w-auto h-16"
+                width={150}
+                height={75}
+                className="w-auto h-20"
               />
             </Link>
+            <div className="font-[family-name:var(--font-inter)] font-light text-gray-600">
+              <p className="flex items-center gap-2">
+                <span className="text-[var(--color-red)]">✉</span>
+                <a href="mailto:parksenah@gmail.com" className="hover:text-[var(--color-pink)] transition-colors">
+                  parksenah@gmail.com
+                </a>
+              </p>
+            </div>
           </div>
 
-          {/* Social Links and Contact Button */}
-          <div className="flex items-center gap-4">
-            <Link
-              href="/contact"
-              className="bg-gradient-to-r from-[var(--color-pink)] to-[var(--color-red)] text-white px-6 py-2 rounded-full font-[family-name:var(--font-inter)] font-medium hover:shadow-lg transition-all duration-300 hover:scale-105"
-            >
-              Get in touch
-            </Link>
-
+          {/* Social Icons and Back to Top */}
+          <div className="flex flex-col items-center gap-6">
             {/* Social Icons */}
             <div className="flex gap-4">
               {socialLinks.map((social) => (
@@ -91,19 +92,37 @@ const Footer = () => {
                 </a>
               ))}
             </div>
+
+            {/* Back to Top */}
+            <button
+              onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+              className="group flex flex-col items-center gap-1 hover:opacity-80 transition-opacity"
+            >
+              <div className="text-3xl text-[var(--color-pink)] group-hover:-translate-y-1 transition-transform">
+                ↑
+              </div>
+              <span className="text-xs text-gray-600 font-[family-name:var(--font-inter)] font-light">
+                Back to Top
+              </span>
+            </button>
           </div>
 
           {/* Flower Decorations (Hidden on mobile) */}
-          <div className="hidden lg:flex gap-6">
+          <div className="hidden lg:flex gap-6 justify-end">
             {flowers.map((flower, index) => (
-              <Image
+              <div
                 key={index}
-                src={flower}
-                alt={`Flower decoration ${index + 1}`}
-                width={82}
-                height={82}
-                className="w-20 h-20 opacity-80 hover:scale-110 transition-transform duration-300"
-              />
+                className="group relative w-20 h-20 cursor-pointer"
+              >
+                <Image
+                  src={flower}
+                  alt={`Flower decoration ${index + 1}`}
+                  width={82}
+                  height={82}
+                  className="w-20 h-20 opacity-80 transition-all duration-500 group-hover:opacity-100 group-hover:scale-110 group-hover:rotate-12"
+                  style={{ animationDelay: `${index * 100}ms` }}
+                />
+              </div>
             ))}
           </div>
         </div>

@@ -10,8 +10,19 @@ const Header = () => {
   const navItems = [
     { name: 'Home', href: '/' },
     { name: 'About', href: '/about' },
-    { name: 'Contact', href: '/contact' },
+    { name: 'Contact', href: '#footer' },
   ];
+
+  const handleNavClick = (href: string, e: React.MouseEvent) => {
+    if (href === '#footer') {
+      e.preventDefault();
+      const footer = document.querySelector('footer');
+      if (footer) {
+        footer.scrollIntoView({ behavior: 'smooth' });
+      }
+      setIsMenuOpen(false);
+    }
+  };
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-white/30 backdrop-blur-sm">
@@ -22,9 +33,9 @@ const Header = () => {
             <Image
               src="/img/newsenahsig.png"
               alt="Senah Park Kearl"
-              width={120}
-              height={60}
-              className="w-auto h-12 hover:opacity-80 transition-opacity duration-300"
+              width={150}
+              height={75}
+              className="w-auto h-16 hover:opacity-80 transition-opacity duration-300"
             />
           </Link>
 
@@ -32,12 +43,21 @@ const Header = () => {
           <ul className="hidden md:flex gap-8 font-[family-name:var(--font-inter)] font-light">
             {navItems.map((item) => (
               <li key={item.name}>
-                <Link
-                  href={item.href}
-                  className="text-gray-700 hover:text-[var(--color-pink)] transition-colors duration-300"
-                >
-                  {item.name}
-                </Link>
+                {item.href.startsWith('#') ? (
+                  <button
+                    onClick={(e) => handleNavClick(item.href, e)}
+                    className="text-gray-700 hover:text-[var(--color-pink)] transition-colors duration-300"
+                  >
+                    {item.name}
+                  </button>
+                ) : (
+                  <Link
+                    href={item.href}
+                    className="text-gray-700 hover:text-[var(--color-pink)] transition-colors duration-300"
+                  >
+                    {item.name}
+                  </Link>
+                )}
               </li>
             ))}
           </ul>
@@ -78,13 +98,22 @@ const Header = () => {
             <ul className="flex flex-col gap-4 font-[family-name:var(--font-inter)] font-light">
               {navItems.map((item) => (
                 <li key={item.name}>
-                  <Link
-                    href={item.href}
-                    onClick={() => setIsMenuOpen(false)}
-                    className="text-gray-700 hover:text-[var(--color-pink)] transition-colors duration-300 block"
-                  >
-                    {item.name}
-                  </Link>
+                  {item.href.startsWith('#') ? (
+                    <button
+                      onClick={(e) => handleNavClick(item.href, e)}
+                      className="text-gray-700 hover:text-[var(--color-pink)] transition-colors duration-300 block w-full text-left"
+                    >
+                      {item.name}
+                    </button>
+                  ) : (
+                    <Link
+                      href={item.href}
+                      onClick={() => setIsMenuOpen(false)}
+                      className="text-gray-700 hover:text-[var(--color-pink)] transition-colors duration-300 block"
+                    >
+                      {item.name}
+                    </Link>
+                  )}
                 </li>
               ))}
             </ul>
