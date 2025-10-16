@@ -93,7 +93,7 @@ const About = () => {
           </div>
 
           {/* Resume Download Button */}
-          <div className="section-fade-in text-center">
+          {/* <div className="section-fade-in text-center">
             <a
               href="/resume.pdf"
               download
@@ -102,7 +102,7 @@ const About = () => {
               <Download size={20} />
               Download Resume
             </a>
-          </div>
+          </div> */}
         </div>
       </div>
     </section>
