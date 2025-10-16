@@ -133,41 +133,66 @@ export default function ProjectPage({ params }: { params: Promise<{ slug: string
         </div>
       </section>
 
-      {/* Content Sections */}
-      {project.sections.map((section, index) => (
-        <section key={index} className="min-h-[75vh] py-20 bg-white/40">
-          <div className="container mx-auto px-6">
-            <div
-              className={`grid lg:grid-cols-2 gap-12 items-center ${
-                index % 2 === 1 ? 'lg:flex-row-reverse' : ''
-              }`}
-            >
-              {/* Image */}
-              <div className={`section-fade-in ${index % 2 === 1 ? 'lg:order-2' : ''}`}>
-                <div className="relative overflow-hidden rounded-2xl shadow-lg transition-all duration-300 hover:shadow-2xl hover:scale-[1.02] hover:-translate-y-1">
-                  <Image
-                    src={section.image}
-                    alt={section.title}
-                    width={600}
-                    height={400}
-                    className="w-full h-auto"
-                  />
-                </div>
-              </div>
+      {/* Timeline Sections */}
+      <section className="py-12 bg-white/40">
+        <div className="container mx-auto px-6 max-w-5xl">
+          <div className="relative pt-8">
+            {/* Timeline Line - Always on left */}
+            <div className="absolute left-8 top-0 bottom-0 w-1 rounded-full bg-gradient-to-b from-[#D73234] via-[#F283B6] to-[#FFD966]" />
 
-              {/* Description */}
-              <div className={`section-fade-in ${index % 2 === 1 ? 'lg:order-1' : ''}`}>
-                <h3 className="text-xl md:text-2xl font-[family-name:var(--font-inter)] font-medium text-gray-800 mb-4">
-                  {section.title}
-                </h3>
-                <p className="font-[family-name:var(--font-inter)] font-light text-gray-700 leading-relaxed">
-                  {section.description}
-                </p>
-              </div>
+            {/* Timeline Items */}
+            <div className="space-y-20">
+              {project.sections.map((section, index) => {
+                const gradientColors = [
+                  '#D73234', // red
+                  '#F283B6', // pink
+                  '#F6BAC6', // light pink
+                  '#FFD966', // yellow
+                ];
+                const circleColor = gradientColors[index % gradientColors.length];
+
+                return (
+                  <div key={index} className="relative flex gap-8">
+                    {/* Content Container */}
+                    <div className="flex-1 ml-20">
+                      <div className="section-fade-in relative">
+                        {/* Timeline Circle - Positioned at center of image */}
+                        <div
+                          className="absolute -left-[5.5rem] top-1/3 w-6 h-6 rounded-full border-4 bg-white z-10"
+                          style={{ borderColor: circleColor }}
+                        />
+
+                        {/* Image */}
+                        <div className="mb-6">
+                          <div className="relative overflow-hidden rounded-2xl shadow-lg transition-all duration-300 hover:shadow-2xl hover:scale-[1.02] hover:-translate-y-1">
+                            <Image
+                              src={section.image}
+                              alt={section.title}
+                              width={600}
+                              height={400}
+                              className="w-full h-auto"
+                            />
+                          </div>
+                        </div>
+
+                        {/* Text Content */}
+                        <div>
+                          <h3 className="text-xl md:text-2xl font-[family-name:var(--font-inter)] font-medium text-gray-800 mb-4">
+                            {section.title}
+                          </h3>
+                          <p className="font-[family-name:var(--font-inter)] font-light text-gray-700 leading-relaxed">
+                            {section.description}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
             </div>
           </div>
-        </section>
-      ))}
+        </div>
+      </section>
 
       {/* Bottom Links */}
       <section className="py-12 bg-white/40">
