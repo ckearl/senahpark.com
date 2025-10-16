@@ -17,6 +17,7 @@ interface AudioPlayerProps {
 	volume: number;
 	playbackSpeed: number;
 	showSkipPopover: { type: "forward" | "backward" | null; show: boolean };
+	showSpeedMenu: boolean;
 	onTimeUpdate: (time: number) => void;
 	onDurationChange: (duration: number) => void;
 	onPlayStateChange: (isPlaying: boolean) => void;
@@ -25,6 +26,8 @@ interface AudioPlayerProps {
 	onVolumeChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 	onPlaybackSpeedChange: (speed: number) => void;
 	onTogglePlayPause: () => void;
+	onToggleSpeedMenu: () => void;
+	onCloseSpeedMenu: () => void;
 }
 
 export default function AudioPlayer({
@@ -35,6 +38,7 @@ export default function AudioPlayer({
 	volume,
 	playbackSpeed,
 	showSkipPopover,
+	showSpeedMenu,
 	onTimeUpdate,
 	onDurationChange,
 	onPlayStateChange,
@@ -43,9 +47,11 @@ export default function AudioPlayer({
 	onVolumeChange,
 	onPlaybackSpeedChange,
 	onTogglePlayPause,
+	onToggleSpeedMenu,
+	onCloseSpeedMenu,
 }: AudioPlayerProps) {
 	const audioRef = useRef<HTMLAudioElement>(null);
-	const [showSpeedMenu, setShowSpeedMenu] = React.useState(false);
+	const [selectedSpeedIndex, setSelectedSpeedIndex] = React.useState(0);
 
 	const speedOptions = [0.5, 1, 1.25, 1.5, 2, 3];
 
@@ -120,6 +126,46 @@ export default function AudioPlayer({
 		playOrPause();
 	}, [isPlaying]);
 
+	// Update selected index when speed menu opens
+	useEffect(() => {
+		if (showSpeedMenu) {
+			const currentIndex = speedOptions.findIndex(speed => speed === playbackSpeed);
+			setSelectedSpeedIndex(currentIndex >= 0 ? currentIndex : 0);
+		}
+	}, [showSpeedMenu, playbackSpeed]);
+
+	// Keyboard navigation for speed menu
+	useEffect(() => {
+		if (!showSpeedMenu) return;
+
+		const handleKeyDown = (e: KeyboardEvent) => {
+			switch (e.key) {
+				case "ArrowDown":
+					e.preventDefault();
+					setSelectedSpeedIndex(prev =>
+						prev < speedOptions.length - 1 ? prev + 1 : prev
+					);
+					break;
+				case "ArrowUp":
+					e.preventDefault();
+					setSelectedSpeedIndex(prev => prev > 0 ? prev - 1 : prev);
+					break;
+				case "Enter":
+					e.preventDefault();
+					onPlaybackSpeedChange(speedOptions[selectedSpeedIndex]);
+					onCloseSpeedMenu();
+					break;
+				case "Escape":
+					e.preventDefault();
+					onCloseSpeedMenu();
+					break;
+			}
+		};
+
+		window.addEventListener("keydown", handleKeyDown);
+		return () => window.removeEventListener("keydown", handleKeyDown);
+	}, [showSpeedMenu, selectedSpeedIndex, speedOptions, onPlaybackSpeedChange, onCloseSpeedMenu]);
+
 	return (
 		<div className="bg-white md:rounded-lg md:shadow-lg p-4 md:p-6">
 			<audio ref={audioRef} preload="metadata">
@@ -191,25 +237,27 @@ export default function AudioPlayer({
 
 					<div className="relative">
 						<button
-							onClick={() => setShowSpeedMenu(!showSpeedMenu)}
+							onClick={onToggleSpeedMenu}
 							className="px-3 py-1.5 rounded-lg bg-gray-100 hover:bg-gray-200 active:bg-gray-300 transition-colors text-sm font-medium text-gray-700 touch-manipulation"
-							title="Playback speed"
+							title="Playback speed (Press S)"
 						>
 							{playbackSpeed}x
 						</button>
 						{showSpeedMenu && (
-							<div className="absolute bottom-full mb-2 right-0 bg-white rounded-lg shadow-lg border border-gray-200 py-1 z-10">
-								{speedOptions.map((speed) => (
+							<div className="absolute top-full mt-2 right-0 bg-white rounded-lg shadow-lg border border-gray-200 py-1 z-10">
+								{speedOptions.map((speed, index) => (
 									<button
 										key={speed}
 										onClick={() => {
 											onPlaybackSpeedChange(speed);
-											setShowSpeedMenu(false);
+											onCloseSpeedMenu();
 										}}
-										className={`w-full px-4 py-2 text-sm text-left hover:bg-gray-100 transition-colors ${
-											playbackSpeed === speed
+										className={`w-full px-4 py-2 text-sm text-left transition-colors ${
+											index === selectedSpeedIndex
+												? "bg-blue-100 text-blue-700 font-medium"
+												: playbackSpeed === speed
 												? "bg-blue-50 text-blue-700 font-medium"
-												: "text-gray-700"
+												: "text-gray-700 hover:bg-gray-100"
 										}`}
 									>
 										{speed}x
@@ -265,25 +313,27 @@ export default function AudioPlayer({
 
 					<div className="relative">
 						<button
-							onClick={() => setShowSpeedMenu(!showSpeedMenu)}
+							onClick={onToggleSpeedMenu}
 							className="px-3 py-2 rounded-lg bg-gray-100 hover:bg-gray-200 active:bg-gray-300 transition-colors text-sm font-medium text-gray-700 touch-manipulation"
-							title="Playback speed"
+							title="Playback speed (Press S)"
 						>
 							{playbackSpeed}x
 						</button>
 						{showSpeedMenu && (
-							<div className="absolute bottom-full mb-2 left-0 bg-white rounded-lg shadow-lg border border-gray-200 py-1 z-10">
-								{speedOptions.map((speed) => (
+							<div className="absolute top-full mt-2 left-0 bg-white rounded-lg shadow-lg border border-gray-200 py-1 z-10">
+								{speedOptions.map((speed, index) => (
 									<button
 										key={speed}
 										onClick={() => {
 											onPlaybackSpeedChange(speed);
-											setShowSpeedMenu(false);
+											onCloseSpeedMenu();
 										}}
-										className={`w-full px-4 py-2 text-sm text-left hover:bg-gray-100 transition-colors ${
-											playbackSpeed === speed
+										className={`w-full px-4 py-2 text-sm text-left transition-colors ${
+											index === selectedSpeedIndex
+												? "bg-blue-100 text-blue-700 font-medium"
+												: playbackSpeed === speed
 												? "bg-blue-50 text-blue-700 font-medium"
-												: "text-gray-700"
+												: "text-gray-700 hover:bg-gray-100"
 										}`}
 									>
 										{speed}x

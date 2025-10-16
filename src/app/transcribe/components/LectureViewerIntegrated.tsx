@@ -60,6 +60,7 @@ export default function LectureViewer({
 	const [showShortcutsModal, setShowShortcutsModal] = useState(false);
 	const [searchToggleCounter, setSearchToggleCounter] = useState(0);
 	const [mobileTab, setMobileTab] = useState<"transcript" | "insights" | "lectures">("transcript");
+	const [showSpeedMenu, setShowSpeedMenu] = useState(false);
 	const hasLoadedProgress = useRef<Set<string>>(new Set());
 
 	// Set initial expanded classes when lectures load
@@ -197,6 +198,10 @@ export default function LectureViewer({
 					// Trigger search toggle by updating state
 					setSearchToggleCounter((prev) => prev + 1);
 					break;
+				case "s":
+					e.preventDefault();
+					setShowSpeedMenu((prev) => !prev);
+					break;
 				case ",":
 					e.preventDefault();
 					if (isPlaying) {
@@ -278,6 +283,14 @@ export default function LectureViewer({
 		setIsPlaying(false);
 	};
 
+	const toggleSpeedMenu = () => {
+		setShowSpeedMenu((prev) => !prev);
+	};
+
+	const closeSpeedMenu = () => {
+		setShowSpeedMenu(false);
+	};
+
 	const toggleClassExpansion = (classNumber: string) => {
 		const newExpanded = new Set(expandedClasses);
 		if (newExpanded.has(classNumber)) {
@@ -355,6 +368,7 @@ export default function LectureViewer({
 						volume={volume}
 						playbackSpeed={playbackSpeed}
 						showSkipPopover={showSkipPopover}
+						showSpeedMenu={showSpeedMenu}
 						onTimeUpdate={setCurrentTime}
 						onDurationChange={setDuration}
 						onPlayStateChange={setIsPlaying}
@@ -363,6 +377,8 @@ export default function LectureViewer({
 						onVolumeChange={handleVolumeChange}
 						onPlaybackSpeedChange={setPlaybackSpeed}
 						onTogglePlayPause={togglePlayPause}
+						onToggleSpeedMenu={toggleSpeedMenu}
+						onCloseSpeedMenu={closeSpeedMenu}
 					/>
 				</div>
 
