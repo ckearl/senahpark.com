@@ -51,65 +51,84 @@ export const projectData = {
   'sams-club': {
     title: "Sam's Club",
     logo: '/img/sc/samsclub.png',
-    subtitle: 'Campaign Strategy Development',
-    links: [
-      {
-        text: 'view case study',
-        url: '#',
-      },
-    ],
+    subtitle: 'Campaign Strategy Formulation',
+    links: [],
     overview: [
-      "Sam's Club wanted to increase enrollment in their Plus membership tier through targeted marketing campaigns.",
-      'The goal was to develop a comprehensive strategy that would resonate with their target demographic and drive conversions.',
+      "Sam's Club seeks to find innovative ways to provide additional value to their members.",
+      'The key goal of this project was to identify additional entry points to their members-exclusive rewards platform. Please note this strategy has not yet been implemented.',
     ],
-    role: 'Marketing Strategist',
-    responsibilities: 'Market research, campaign development, metrics analysis, presentation design',
-    date: 'Spring 2023',
+    role: 'Membership Intern',
+    responsibilities: 'Affinity analysis, campaign placement strategy, analytics (SQL) result forecasting, visual design + flow',
+    date: 'May - August 2023',
     sections: [
       {
-        title: 'Market Research',
+        title: 'Current State + Competitive Analysis',
         description:
-          "Conducted extensive research into Sam's Club's target demographics, analyzing shopping behaviors, preferences, and pain points to identify key opportunities for Plus membership growth.",
-        image: '/img/sc/sc-index-demo.png',
+          "To best understand the platform and its features, I conducted a current state analysis of the Sam's Club reward platform as well as similar competitor platforms. Features and pain points of each site were documented.",
+        image: '/img/sc/competitive_state.png',
       },
       {
-        title: 'Campaign Strategy',
+        title: 'Member Affinity Analysis',
         description:
-          'Developed a multi-channel marketing strategy that leveraged both digital and in-store touchpoints to maximize reach and engagement with potential Plus members.',
-        image: '/img/sc/sc-index-demo.png',
+          "The target demographic of Sam's Club have a unique set of characteristics and behaviors. I identified valuable current and future platform partners by leveraging affinity data of member spending and forecasted their added utility. These partners acted as a foundation for the next step in the process.",
+        image: '/img/sc/member_affinity.png',
+      },
+      {
+        title: 'Collection Ideation',
+        description:
+          "With everything in mind, I worked with my manager to decide which collection types would be most beneficial to Sam's club members. Offers were curated surrounding each collection and strategically determined where to insert them on the native samsclub.com site to provide additional entry points to the platform.",
+        image: '/img/sc/collection_ideation.png',
+      },
+      {
+        title: 'Entry Point and Site Mockup',
+        description:
+          'With collection types and placements defined, I worked with my team to wireframe the user journey and flow. The wireframe enabled me to create visual mockups for various collections and access locations on the samsclub.com site.',
+        image: '/img/sc/entry_point.png',
       },
     ],
   },
   'byu-marriott': {
     title: 'BYU Marriott',
     logo: '/img/byu/byumarriottlogo.png',
-    subtitle: 'Brand Management & Student Engagement',
+    subtitle: 'Brand Management Strategy + Implementation',
     links: [
       {
-        text: 'view portfolio',
-        url: '#',
+        text: 'visit @byumarriottlife on instagram',
+        url: 'https://www.instagram.com/byumarriottlife/',
       },
     ],
     overview: [
-      'BYU Marriott School of Business sought to strengthen their brand presence and create more engaging experiences for students.',
-      'The project focused on developing both digital and physical touchpoints that would resonate with the student body.',
+      'BYU Marriott seeks to develop their students into leaders of faith, intellect, and character.',
+      'The key focus of my initiatives is to better align the online and offline experiences of BYU Marriott students with the vision, mission, and values.',
     ],
-    role: 'Brand Manager',
+    role: 'Marketing Strategist',
     responsibilities:
-      'Brand strategy, digital content creation, event planning, student engagement initiatives',
-    date: '2022 - Present',
+      'Engagement and campaign strategy, social media strategy, graphic design, event logistics, videography',
+    date: 'April 2021 - present',
     sections: [
       {
-        title: 'Digital Engagement',
+        title: 'Initiative Ideation',
         description:
-          'Created compelling digital content and experiences that strengthened the connection between students and the Marriott School brand, increasing engagement across social media and digital platforms.',
-        image: '/img/byu/byu-index-demo.png',
+          'BYU Marriott seeks to develop their students into leaders of faith, intellect, and character. The key focus of my initiatives is to better align the online and offline experiences of BYU Marriott students with the vision, mission, and values.',
+        image: '/img/byu/iniative_ideation.png',
       },
       {
-        title: 'Physical Experiences',
+        title: 'Cross-functional Collaboration',
         description:
-          'Designed and executed tangible brand experiences including events, installations, and materials that brought the Marriott School brand to life on campus.',
-        image: '/img/byu/byu-index-demo.png',
+          "To ensure smooth sailing across all marketing efforts, I collaborated across several teams, including the BYU Marriott marketing & communications department, dean's office events team, and the student council.",
+        image: '/img/byu/collaboration.png',
+      },
+      {
+        title: 'Communication Strategy',
+        description:
+          'Consistency and clarity was a priority across all marketing channels. All visual assets for BYU Marriott efforts were designed by me, including social media posts, digital signage, and physical flyers.',
+        image: '/img/byu/communication.png',
+      },
+      {
+        title: 'Execution',
+        description:
+          'With the support of my team, I have successfully executed and supported large-scale events and social media campaigns for BYU Marriott. My attention to detail and creativity resulted in increased engagement and a positive impact on the BYU Marriott brand.',
+        image: '/img/byu/execution.png',
       },
     ],
   },

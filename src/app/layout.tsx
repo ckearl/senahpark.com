@@ -15,10 +15,13 @@ const shrikhand = Shrikhand({
 });
 
 export const metadata: Metadata = {
-  title: "Senah Park Kearl - Portfolio",
+  title: "Senah Park - Portfolio",
   description: "MBA student specializing in Finance and Brand Management",
   keywords: ["portfolio", "finance", "brand management", "MBA", "professional"],
   authors: [{ name: "Senah Park Kearl" }],
+  icons: {
+    icon: '/icon.png',
+  },
 };
 
 export const viewport: Viewport = {
